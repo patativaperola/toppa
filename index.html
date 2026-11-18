@@ -1,0 +1,1827 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Toppa – versão de teste</title>
+<meta name="description" content="Toppa: o app que conecta freelancers verificados e empresas. Versão de teste.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 120 120%27%3E%3Crect width=%27120%27 height=%27120%27 rx=%2727%27 fill=%27%236D28D9%27/%3E%3Cpath d=%27M33 62 L52 81%27 stroke=%27%23C4B5FD%27 stroke-width=%2718%27 stroke-linecap=%27round%27/%3E%3Cpath d=%27M52 81 L89 41%27 stroke=%27white%27 stroke-width=%2718%27 stroke-linecap=%27round%27/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap">
+<style>
+:root{
+  --roxo:#6D28D9; --roxo-esc:#5B21B6; --roxo-noite:#2E1065; --roxo-med:#4C1D95;
+  --lilas:#EDE7FB; --lilas-2:#DDD3FA; --nevoa:#F7F5FC; --borda:#ECE6FA; --borda-2:#DCD3F5;
+  --tinta:#1F1B2E; --texto:#4B4560; --suave:#5A5470; --cinza:#6B6580; --branco:#FFFFFF;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,system-ui,sans-serif;color:var(--tinta);background:#fff;-webkit-font-smoothing:antialiased}
+h1,h2,h3,.disp{font-family:'Space Grotesk',sans-serif}
+a{color:var(--roxo)}
+button{font-family:inherit}
+.wrap{max-width:1200px;margin:0 auto;padding:0 28px}
+.eyebrow{font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--roxo)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:12px 20px;border-radius:12px;border:none;font-weight:600;font-size:15px;cursor:pointer;text-decoration:none;transition:transform .12s ease, background .15s ease}
+.btn:active{transform:scale(.98)}
+.btn-roxo{background:var(--roxo);color:#fff}.btn-roxo:hover{background:var(--roxo-esc)}
+.btn-borda{background:#fff;color:var(--roxo-esc);border:1.5px solid var(--borda-2)}.btn-borda:hover{background:var(--nevoa)}
+.btn-branco{background:#fff;color:var(--roxo-esc)}
+.btn-ghost{background:transparent;color:var(--roxo)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.ico{width:20px;height:20px;flex:none}
+.tag{display:inline-flex;align-items:center;padding:6px 12px;border-radius:999px;background:#F2F0F7;font-size:13px;font-weight:500;color:var(--texto)}
+
+/* Faixa de teste */
+.faixa{background:var(--roxo-noite);color:#E4DAFD;font-size:13.5px;text-align:center;padding:10px 16px}
+.faixa b{color:#fff}
+
+/* Nav */
+header.top{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.94);backdrop-filter:blur(8px);border-bottom:1px solid #ECEAF2}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 28px;max-width:1200px;margin:0 auto;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--tinta)}
+.logo-q{width:36px;height:36px;display:flex;flex:none}
+.logo-q svg{display:block}
+.logo-t{font-family:'Space Grotesk';font-weight:700;font-size:24px;letter-spacing:-1px}
+.links{display:flex;gap:24px;font-size:15px;font-weight:500;flex-wrap:wrap}
+.links a{color:var(--texto);text-decoration:none}.links a:hover{color:var(--roxo)}
+.nav-acoes{display:flex;gap:10px;align-items:center}
+
+/* Hero */
+.hero{background:var(--nevoa)}
+.hero .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:56px;padding-top:80px;padding-bottom:88px}
+.hero-txt{flex:1 1 480px;min-width:0;display:flex;flex-direction:column;gap:26px}
+.selo{align-self:flex-start;display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;background:var(--lilas);color:var(--roxo-esc);font-size:14px;font-weight:600}
+.hero h1{margin:0;font-size:clamp(40px,5.4vw,64px);line-height:1.04;letter-spacing:-2px}
+.hero h1 span{color:var(--roxo)}
+.hero p.lead{margin:0;font-size:19px;line-height:1.6;color:var(--suave);max-width:540px}
+.portas{display:flex;flex-wrap:wrap;gap:14px}
+.porta{flex:1 1 220px;display:flex;align-items:center;gap:14px;padding:18px 20px;border-radius:16px;cursor:pointer;text-align:left;border:1.5px solid var(--borda-2);background:#fff;color:var(--tinta)}
+.porta.on{background:var(--roxo);border-color:var(--roxo);color:#fff}
+.porta .pi{width:44px;height:44px;border-radius:12px;background:var(--lilas);display:flex;align-items:center;justify-content:center;flex:none}
+.porta.on .pi{background:#8B5CF6}
+.porta b{display:block;font-size:17px}.porta small{font-size:14px;color:var(--suave)}.porta.on small{color:#E4DAFD}
+.hero-vis{flex:1 1 360px;min-width:0;display:flex;justify-content:center;position:relative}
+.fone{width:310px;border-radius:44px;background:var(--tinta);padding:12px;box-shadow:0 30px 60px rgba(46,16,101,.18)}
+.tela{border-radius:34px;background:#fff;overflow:hidden}
+.chip-topou{position:absolute;bottom:60px;left:0;display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:16px;background:#fff;box-shadow:0 12px 30px rgba(46,16,101,.12);border:1px solid #ECEAF2}
+
+/* Seções */
+section.sec{padding:92px 0}
+.sec-head{display:flex;flex-direction:column;gap:14px;max-width:720px;margin-bottom:40px}
+.sec-head h2{margin:0;font-size:clamp(32px,3.6vw,44px);line-height:1.1;letter-spacing:-1px}
+.sec-head p{margin:0;font-size:18px;line-height:1.6;color:var(--suave)}
+.center{text-align:center;align-items:center;margin-left:auto;margin-right:auto}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:22px}
+.grid4{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px}
+.card{padding:32px;border-radius:24px;background:var(--nevoa);border:1px solid var(--borda)}
+.card.esc{background:var(--roxo-noite);border-color:var(--roxo-noite);color:#fff}
+.card h3{margin:14px 0 10px;font-size:26px}
+.card p{margin:0;color:var(--suave);line-height:1.6}
+.card.esc p{color:#D6CCF5}
+.lista{display:flex;flex-direction:column;gap:10px;margin-top:18px;font-size:15px}
+.lista span{display:flex;gap:10px;align-items:center}
+.ic-box{width:52px;height:52px;border-radius:15px;background:var(--roxo);display:flex;align-items:center;justify-content:center}
+.passo{padding:26px;border-radius:20px;background:#fff;border:1px solid var(--borda);display:flex;flex-direction:column;gap:12px;min-height:210px}
+.passo .n{width:42px;height:42px;border-radius:12px;background:var(--lilas);color:var(--roxo);display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk';font-weight:700;font-size:18px}
+.passo h3{margin:0;font-size:18px;font-family:Inter}
+.passo p{margin:0;color:var(--suave);font-size:15px;line-height:1.6}
+.seg{display:inline-flex;padding:5px;border-radius:14px;background:#fff;border:1px solid #E5DFF5;gap:4px;flex-wrap:wrap}
+.seg button{min-height:44px;padding:10px 16px;border-radius:10px;border:none;background:transparent;color:var(--texto);font-weight:600;font-size:14.5px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--roxo);color:#fff}
+
+/* Planos */
+.planos{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;margin-top:28px}
+.plano{position:relative;padding:28px;border-radius:22px;border:1.5px solid var(--borda-2);background:#fff;display:flex;flex-direction:column;gap:14px;text-align:left;cursor:pointer;color:var(--tinta)}
+.plano:hover{border-color:var(--roxo)}
+.plano.on{background:var(--roxo);border-color:var(--roxo);color:#fff;box-shadow:0 20px 50px rgba(109,40,217,.25)}
+.plano .nome{font-family:'Space Grotesk';font-weight:700;font-size:20px}
+.plano .preco{display:flex;align-items:baseline;gap:4px}
+.plano .preco b{font-family:'Space Grotesk';font-size:40px;letter-spacing:-1.5px;line-height:1}
+.plano .preco small{font-size:14px;color:var(--suave)}
+.plano.on .preco small,.plano.on .det{color:#E4DAFD}
+.plano .det{font-size:14px;color:var(--suave);line-height:1.5}
+.badge{position:absolute;top:-12px;right:18px;padding:6px 12px;border-radius:999px;background:var(--roxo-noite);color:#fff;font-size:12px;font-weight:700}
+.plano.on .badge{background:#fff;color:var(--roxo-esc)}
+.desc{display:inline-flex;align-self:flex-start;padding:5px 10px;border-radius:999px;background:var(--lilas);color:var(--roxo-esc);font-size:12.5px;font-weight:700}
+.plano.on .desc{background:var(--roxo-med);color:#fff}
+
+/* Deck de perfis */
+.deck-area{display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start}
+.cartao{flex:1 1 360px;max-width:440px;border-radius:28px;background:#fff;overflow:hidden;border:1px solid var(--borda);box-shadow:0 20px 50px rgba(46,16,101,.10);position:relative}
+.foto{height:280px;display:flex;align-items:center;justify-content:center;position:relative;font-family:'Space Grotesk';font-size:88px;font-weight:700;color:var(--roxo-esc)}
+.foto .pill{position:absolute;top:16px;font-size:13px;font-weight:700;padding:7px 12px;border-radius:999px;font-family:Inter}
+.cartao .corpo{padding:20px 22px 24px;display:flex;flex-direction:column;gap:12px}
+.nota{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-radius:16px;background:var(--nevoa)}
+.estrelas{display:flex;gap:2px}
+.acoes{display:flex;justify-content:center;gap:16px;margin-top:18px}
+.redondo{border-radius:999px;border:1.5px solid #E2DEEC;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.detalhes{flex:999 1 420px;min-width:0;display:flex;flex-direction:column;gap:16px}
+.mini{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
+.mini div{padding:18px;border-radius:16px;background:#fff;border:1px solid var(--borda)}
+.mini small{display:block;font-size:13px;color:var(--suave);margin-bottom:4px}
+.mini b{font-family:'Space Grotesk';font-size:26px}
+.caixa{padding:22px;border-radius:20px;background:#fff;border:1px solid var(--borda)}
+.caixa h4{margin:0 0 10px;font-size:17px}
+.barra{height:8px;border-radius:999px;background:#EFEBF8;overflow:hidden;flex:1}
+.barra i{display:block;height:100%;background:var(--roxo);border-radius:999px}
+.overlay-topou{position:absolute;inset:0;background:var(--roxo-noite);display:none;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:28px;text-align:center;color:#fff;border-radius:28px}
+.overlay-topou.show{display:flex}
+
+/* FAQ */
+.faq{max-width:820px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+.faq details{border-radius:16px;background:#fff;border:1px solid var(--borda)}
+.faq summary{list-style:none;cursor:pointer;padding:20px 22px;font-weight:600;font-size:17px;display:flex;justify-content:space-between;gap:16px;align-items:center}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font-size:24px;color:var(--roxo);font-weight:500}
+.faq details[open] summary::after{content:"–"}
+.faq p{margin:0;padding:0 22px 22px;color:var(--suave);line-height:1.65}
+
+footer{border-top:1px solid #ECEAF2;padding:32px 0}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:16px;font-size:14px;color:var(--cinza)}
+
+/* Modal */
+.modal-bg{position:fixed;inset:0;background:rgba(31,27,46,.55);z-index:100;display:none;align-items:flex-start;justify-content:center;padding:32px 16px;overflow-y:auto}
+.modal-bg.show{display:flex}
+.modal{width:100%;max-width:620px;background:#fff;border-radius:26px;box-shadow:0 40px 80px rgba(31,27,46,.35);margin:auto 0}
+.modal-top{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid #ECEAF2;gap:12px}
+.modal-body{padding:26px 26px 28px}
+.prog{display:flex;gap:6px;margin:0 22px;padding-top:14px}
+.prog i{flex:1;height:5px;border-radius:999px;background:#EFEBF8}
+.prog i.on{background:var(--roxo)}
+.modal h2{margin:0 0 6px;font-size:28px;letter-spacing:-.5px}
+.modal .sub{margin:0 0 22px;color:var(--suave);line-height:1.55}
+.campo{display:flex;flex-direction:column;gap:7px;margin-bottom:16px}
+.campo label{font-size:14px;font-weight:600}
+.campo .ajuda{font-size:13px;color:var(--cinza)}
+input[type=text],input[type=date],input[type=number],select,textarea{width:100%;font:inherit;font-size:15px;padding:12px 14px;border-radius:12px;border:1.5px solid #E2DEEC;background:#fff;color:var(--tinta);min-height:46px}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--roxo);box-shadow:0 0 0 3px var(--lilas)}
+textarea{min-height:96px;resize:vertical}
+.linha{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:560px){.linha{grid-template-columns:1fr}}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips button{min-height:40px;padding:8px 14px;border-radius:999px;border:1.5px solid var(--borda-2);background:#fff;color:var(--texto);font-size:14px;font-weight:600;cursor:pointer}
+.chips button[aria-pressed="true"]{background:var(--roxo);border-color:var(--roxo);color:#fff}
+.escolha{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:520px){.escolha{grid-template-columns:1fr}}
+.escolha button{padding:22px;border-radius:18px;border:1.5px solid var(--borda-2);background:#fff;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:10px;color:var(--tinta)}
+.escolha button:hover{border-color:var(--roxo);background:var(--nevoa)}
+.escolha b{font-size:18px}.escolha small{color:var(--suave);line-height:1.5;font-size:14px}
+.verif{display:flex;flex-direction:column;gap:12px}
+.vitem{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px;border-radius:14px;background:var(--nevoa);flex-wrap:wrap}
+.vitem .st{font-size:13.5px;font-weight:700;color:var(--roxo-esc);display:flex;align-items:center;gap:6px}
+.aviso{display:flex;gap:10px;padding:14px 16px;border-radius:14px;background:var(--lilas);color:var(--roxo-med);font-size:14px;line-height:1.5;margin-bottom:18px}
+.modal-pe{display:flex;justify-content:space-between;gap:12px;margin-top:22px;flex-wrap:wrap}
+.erro{color:#B42318;font-size:13.5px;font-weight:600;min-height:18px}
+.opcoes{display:flex;flex-direction:column;gap:8px}
+.opcoes button{min-height:48px;padding:12px 16px;border-radius:12px;border:1.5px solid var(--borda-2);background:#fff;text-align:left;font-size:15px;font-weight:500;cursor:pointer;color:var(--tinta)}
+.opcoes button[aria-pressed="true"]{border-color:var(--roxo);background:var(--lilas);color:var(--roxo-med);font-weight:700}
+.planos-m{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:520px){.planos-m{grid-template-columns:1fr}}
+.planos-m .plano{padding:18px;gap:8px}
+.planos-m .plano .preco b{font-size:30px}
+.planos-m .badge{top:-10px;right:12px}
+input[type=range]{width:100%;accent-color:var(--roxo)}
+.ok-ic{width:72px;height:72px;border-radius:999px;background:var(--lilas);display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
+.resumo{padding:16px;border-radius:14px;background:var(--nevoa);font-size:14.5px;line-height:1.7;margin-top:16px}
+
+/* Painel */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:20px}
+.kpis div{padding:16px;border-radius:14px;background:var(--nevoa)}
+.kpis small{display:block;font-size:12.5px;color:var(--suave);margin-bottom:4px}
+.kpis b{font-family:'Space Grotesk';font-size:28px}
+.tabela{width:100%;border-collapse:collapse;font-size:14px}
+.tabela th,.tabela td{text-align:left;padding:10px 8px;border-bottom:1px solid #ECEAF2}
+.tabela th{font-size:12.5px;color:var(--suave);text-transform:uppercase;letter-spacing:.5px}
+.scroll-x{overflow-x:auto}
+.toast{position:fixed;bottom:96px;left:50%;transform:translateX(-50%);background:var(--tinta);color:#fff;padding:14px 20px;border-radius:14px;font-size:14.5px;font-weight:600;z-index:300;display:none;max-width:90vw;text-align:center;box-shadow:0 12px 30px rgba(31,27,46,.25)}
+.toast.show{display:block}
+.regras{display:flex;flex-direction:column;gap:12px;margin-bottom:18px}
+.regra{display:flex;gap:14px;padding:16px;border-radius:14px;background:var(--nevoa);align-items:flex-start}
+.regra .rn{width:36px;height:36px;border-radius:10px;background:var(--roxo);color:#fff;display:flex;align-items:center;justify-content:center;flex:none;font-family:'Space Grotesk';font-weight:700}
+.regra b{display:block;margin-bottom:4px;font-size:15.5px}
+.regra p{margin:0;font-size:14px;color:var(--texto);line-height:1.55}
+.aceite{display:flex;gap:12px;align-items:flex-start;padding:16px;border-radius:14px;border:1.5px solid var(--borda-2);cursor:pointer;font-size:15px;font-weight:600}
+.aceite input{width:22px;height:22px;accent-color:var(--roxo);flex:none;margin:0}
+.funcao{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border-radius:14px;border:1.5px solid #ECEAF2;flex-wrap:wrap}
+.funcao.on{border-color:var(--roxo);background:var(--nevoa)}
+.stepper{display:flex;align-items:center;gap:10px}
+.stepper button{width:40px;height:40px;border-radius:999px;border:1.5px solid var(--borda-2);background:#fff;font-size:20px;font-weight:600;color:var(--roxo);cursor:pointer}
+.stepper b{min-width:22px;text-align:center;font-size:17px}
+.eventos{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.eventos button{padding:16px;border-radius:14px;border:1.5px solid var(--borda-2);background:#fff;text-align:left;cursor:pointer;font-weight:600;font-size:15px;color:var(--tinta);min-height:64px}
+.eventos button[aria-pressed="true"]{border-color:var(--roxo);background:var(--lilas);color:var(--roxo-med)}
+.pagopc{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:560px){.pagopc{grid-template-columns:1fr}}
+.pagopc button{padding:18px;border-radius:16px;border:1.5px solid var(--borda-2);background:#fff;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:6px;color:var(--tinta)}
+.pagopc button[aria-pressed="true"]{border-color:var(--roxo);background:var(--roxo);color:#fff}
+.pagopc button[aria-pressed="true"] .s{color:#E4DAFD}
+.pagopc .s{font-size:13.5px;color:var(--suave);line-height:1.5}
+.fluxo-pg{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px;counter-reset:pg}
+.fluxo-pg .et{position:relative;padding:24px;border-radius:20px;background:#fff;border:1px solid var(--borda)}
+.fluxo-pg .et .eti{width:48px;height:48px;border-radius:14px;background:var(--lilas);display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+.fluxo-pg .et h3{margin:0 0 6px;font-size:17px;font-family:Inter}
+.fluxo-pg .et p{margin:0;font-size:14.5px;color:var(--suave);line-height:1.55}
+.preco-opc{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;margin-top:28px}
+.popc{padding:32px;border-radius:24px;border:1.5px solid var(--borda-2);background:#fff;display:flex;flex-direction:column;gap:16px}
+.popc.dest{background:var(--roxo-noite);border-color:var(--roxo-noite);color:#fff}
+.popc h3{margin:0;font-size:24px}
+.popc .grande{font-family:'Space Grotesk';font-size:44px;font-weight:700;letter-spacing:-1.5px;line-height:1}
+.popc .s{color:var(--suave);font-size:15px;line-height:1.55}
+.popc.dest .s{color:#D6CCF5}
+.popc ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px;font-size:15px}
+.popc li{display:flex;gap:10px;align-items:flex-start}
+.estrelas-in{display:flex;gap:6px}
+.estrelas-in button{width:48px;height:48px;border:none;background:transparent;cursor:pointer;padding:4px;border-radius:10px}
+.estrelas-in button:focus-visible{outline:3px solid var(--lilas)}
+/* combobox endereço */
+.combo{position:relative}
+.combo-ic{position:absolute;left:13px;top:23px;transform:translateY(-50%);color:var(--roxo);pointer-events:none;display:flex}
+input.combo-in{padding-left:40px}
+.combo-lista{position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:30;background:#fff;border:1px solid var(--borda-2);border-radius:14px;box-shadow:0 16px 40px rgba(31,27,46,.16);list-style:none;margin:0;padding:6px;max-height:300px;overflow-y:auto}
+.combo-lista li{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;cursor:pointer;font-size:15px;min-height:44px;color:var(--tinta)}
+.combo-lista li svg{flex:none;color:var(--cinza)}
+.combo-lista li.ativo,.combo-lista li:hover{background:var(--lilas)}
+.combo-lista li.ativo svg,.combo-lista li:hover svg{color:var(--roxo)}
+.combo-lista .cid{color:var(--suave);font-weight:400}
+.combo-lista li.livre{color:var(--roxo-esc);font-weight:600;border-top:1px solid #F0EDF7;border-radius:0 0 10px 10px;margin-top:4px}
+/* valor em R$ */
+.moeda{display:flex;align-items:center;border:1.5px solid #E2DEEC;border-radius:12px;background:#fff;min-height:46px;padding-left:14px}
+.moeda span{font-weight:600;color:var(--suave);margin-right:6px}
+.moeda input{border:none!important;box-shadow:none!important;padding-left:0!important;font-weight:600;min-height:42px;background:transparent}
+.moeda:focus-within{border-color:var(--roxo);box-shadow:0 0 0 3px var(--lilas)}
+/* itens da reserva */
+.itens{display:flex;flex-direction:column;gap:10px}
+.item{padding:16px;border-radius:16px;border:1.5px solid #ECEAF2;background:#fff;display:flex;flex-direction:column;gap:12px;transition:border-color .15s,background .15s}
+.item.on{border-color:var(--roxo);background:var(--nevoa)}
+.item-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.item-top b{font-size:16px}
+.item-top small{display:block;font-size:13px;color:var(--suave);margin-top:2px}
+.item-sub{font-weight:700;color:var(--roxo-esc);white-space:nowrap;font-size:15px}
+.item-campos{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:end}
+.item-campos label,.item-campos .lbl{display:block;font-size:13px;font-weight:600;margin-bottom:6px;color:var(--texto)}
+.item-nome{font-weight:600}
+.rem{width:40px;height:40px;border-radius:10px;border:1.5px solid var(--borda-2);background:#fff;color:#B42318;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none}
+.add-custom{width:100%;min-height:56px;border-radius:16px;border:1.5px dashed var(--borda-2);background:#fff;color:var(--roxo-esc);font-weight:700;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
+.add-custom:hover{border-color:var(--roxo);background:var(--nevoa)}
+.grupo-tit{font-size:12.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--suave);margin:18px 0 8px}
+.pe-fixo{position:sticky;bottom:0;background:#fff;margin:16px -26px -28px;padding:14px 26px 20px;border-top:1px solid #ECEAF2;box-shadow:0 -10px 24px rgba(31,27,46,.06);z-index:4}
+.pe-fixo .modal-pe{margin-top:10px}
+.tot{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:15px}
+.tot b.disp{font-size:24px}
+@media (max-width:440px){.item-campos{grid-template-columns:1fr}}
+/* app do freelancer */
+.app{position:fixed;inset:0;z-index:150;background:var(--nevoa);display:flex;flex-direction:column}
+.app-bar{background:#fff;border-bottom:1px solid #ECEAF2;flex:none}
+.app-bar-in{max-width:1120px;margin:0 auto;padding:10px 20px;display:flex;align-items:center;gap:16px;justify-content:space-between}
+.app-tabs{display:flex;gap:4px;background:#F2F0F7;padding:4px;border-radius:14px}
+.app-tabs button{min-height:44px;padding:8px 16px;border:none;border-radius:10px;background:transparent;font-weight:600;font-size:14.5px;color:var(--texto);cursor:pointer;display:flex;align-items:center;gap:8px}
+.app-tabs button svg{width:20px;height:20px}
+.app-tabs button[aria-selected="true"]{background:#fff;color:var(--roxo-esc);box-shadow:0 1px 4px rgba(31,27,46,.08)}
+.cont{min-width:20px;height:20px;padding:0 6px;border-radius:999px;background:var(--roxo);color:#fff;font-size:12px;display:inline-flex;align-items:center;justify-content:center}
+.app-main{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.app-in{max-width:1120px;margin:0 auto;padding:26px 20px 48px}
+.app-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:16px;margin-bottom:24px}
+.vazio{padding:56px 24px;border-radius:24px;background:#fff;border:1px solid var(--borda);text-align:center}
+.vaga{border-radius:28px;background:#fff;overflow:hidden;border:1px solid var(--borda);box-shadow:0 20px 50px rgba(46,16,101,.10);position:relative}
+.vaga-top{display:flex;align-items:center;gap:12px;padding:16px 18px}
+.emp-logo{width:48px;height:48px;border-radius:14px;background:#fff;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk';font-weight:700;font-size:18px;color:var(--roxo-esc);flex:none}
+.pill-n{margin-left:auto;padding:6px 10px;border-radius:999px;background:var(--roxo-noite);color:#fff;font-size:12.5px;font-weight:700;white-space:nowrap}
+.vaga-corpo{padding:18px 22px 24px;display:flex;flex-direction:column;gap:14px}
+.vaga-valor{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 8px;padding:14px 16px;border-radius:16px;background:var(--nevoa)}
+.vaga-valor b{font-size:34px;letter-spacing:-1px;color:var(--roxo-esc);line-height:1}
+.vaga-valor span{color:var(--suave);font-size:14px}
+.vaga-valor .pg-24{width:100%;font-size:13px}
+.info-l{display:flex;align-items:flex-start;gap:10px;font-size:15px;color:var(--texto);line-height:1.45}
+.info-l svg{flex:none;color:var(--roxo);margin-top:1px}
+.topar-btn{min-height:64px;padding:0 30px;border-radius:999px;font-size:17px}
+.acoes .redondo:disabled{opacity:.4;cursor:not-allowed}
+.pg-linha{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid #F0EDF7;font-size:15px}
+.pg-linha b{white-space:nowrap}
+.pg-linha small{display:block;font-size:13px;color:var(--suave);margin-top:2px}
+.pg-nota{margin:12px 0 0;font-size:14px;color:var(--texto);line-height:1.6}
+.linha-tempo{list-style:none;margin:0;padding:0}
+.linha-tempo li{display:flex;gap:14px;padding:0 0 14px 0;position:relative;font-size:15px;line-height:1.45}
+.linha-tempo li:not(:last-child)::after{content:"";position:absolute;left:21px;top:24px;bottom:2px;width:2px;background:var(--lilas-2)}
+.linha-tempo .hora{width:44px;flex:none;font-weight:700;color:var(--roxo-esc);font-size:14px;text-align:center;background:var(--lilas);border-radius:8px;padding:2px 0;height:fit-content}
+.ficha{display:flex;flex-direction:column;gap:10px}
+.ficha div{display:flex;flex-direction:column;gap:2px}
+.ficha small{font-size:12.5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--suave)}
+.lembrete{margin:0;font-size:13.5px;color:var(--suave);padding:0 4px}
+.topada{display:flex;gap:16px;padding:16px;border-radius:18px;background:#fff;border:1px solid var(--borda);align-items:flex-start;flex-wrap:wrap}
+.dia{width:60px;flex:none;text-align:center;border-radius:14px;background:var(--lilas);padding:8px 0}
+.dia b{display:block;font-family:'Space Grotesk';font-size:26px;color:var(--roxo-esc);line-height:1.1}
+.dia small{display:block;font-size:11.5px;text-transform:uppercase;font-weight:700;color:var(--roxo)}
+.status{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;font-size:12.5px;font-weight:700}
+.status.ok{background:var(--roxo);color:#fff}
+.status.esp{background:#F2F0F7;color:var(--texto)}
+.lista-regras{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:8px;font-size:14.5px;line-height:1.55;color:var(--texto)}
+@media (max-width:720px){
+  .app-bar-in{padding:10px 16px}
+  .app-tabs{position:fixed;bottom:0;left:0;right:0;border-radius:0;background:#fff;border-top:1px solid #ECEAF2;padding:6px 8px calc(8px + env(safe-area-inset-bottom));justify-content:space-around;z-index:5;box-shadow:0 -6px 20px rgba(31,27,46,.06)}
+  .app-tabs button{flex:1;flex-direction:column;gap:3px;font-size:12px;padding:6px 4px;min-height:54px;position:relative}
+  .app-tabs button[aria-selected="true"]{box-shadow:none;background:var(--lilas)}
+  .app-tabs .cont{position:absolute;top:2px;right:calc(50% - 26px)}
+  .app-in{padding:20px 16px 110px}
+  .app-head h1{font-size:26px!important}
+  .app-head{margin-bottom:16px}
+  .app-head .chips{flex-wrap:nowrap;overflow-x:auto;margin:0 -16px;padding:2px 16px 4px;scrollbar-width:none}
+  .app-head .chips::-webkit-scrollbar{display:none}
+  .app-head .chips button{flex:none}
+  .acoes-vaga{position:sticky;bottom:84px;z-index:3;margin-top:14px;padding:8px 0}
+  .vaga-top{padding:14px 16px}
+}
+@media (max-width:600px){
+  .modal-bg{padding:0;align-items:stretch}
+  .modal{border-radius:0;min-height:100%;box-shadow:none}
+  .modal-body{padding:22px 18px 28px}
+  .pe-fixo{margin:16px -18px -28px;padding:12px 18px calc(16px + env(safe-area-inset-bottom))}
+  .modal h2{font-size:24px}
+  .hero .wrap{padding-top:48px;padding-bottom:56px}
+  section.sec{padding:64px 0}
+  .nav{padding:12px 18px}
+  .links{display:none}
+  .nav-acoes{width:100%;gap:8px}
+  .nav-acoes .btn{white-space:nowrap;padding:10px 12px;font-size:14px;min-height:44px;flex:1 1 auto}
+  .so-desk{display:none}
+}
+.cand{display:flex;align-items:center;gap:12px;padding:12px;border-radius:14px;background:var(--nevoa);flex-wrap:wrap}
+.cand-av{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk';font-weight:700;color:var(--roxo-esc);flex:none}
+.pg-ev{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:16px 20px;background:#FBFAFE;border-top:1px solid #F0EDF7}
+.lbl-f{font-size:14px;font-weight:600}
+.foto-up{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.foto-prev{width:96px;height:96px;border-radius:18px;background:var(--nevoa);border:1.5px dashed var(--borda-2);display:flex;align-items:center;justify-content:center;overflow:hidden;color:var(--roxo);flex:none}
+.foto-prev.redondo{border-radius:999px}
+.foto-prev img{width:100%;height:100%;object-fit:cover;display:block}
+.foto-acoes{display:flex;flex-wrap:wrap;gap:8px;align-items:center;flex:1;min-width:200px}
+.foto-acoes .ajuda{width:100%}
+.foto-up:focus-within label.btn,.campo:focus-within .port-add{outline:3px solid var(--lilas);outline-offset:2px}
+.port-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.port-item{position:relative;aspect-ratio:1;border-radius:14px;overflow:hidden;background:var(--nevoa)}
+.port-item img{width:100%;height:100%;object-fit:cover;display:block}
+.port-rem{position:absolute;top:6px;right:6px;width:36px;height:36px;border-radius:999px;border:none;background:rgba(31,27,46,.78);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.port-add{aspect-ratio:1;border-radius:14px;border:1.5px dashed var(--borda-2);background:var(--nevoa);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:var(--roxo-esc);font-weight:600;font-size:14px;cursor:pointer;text-align:center;padding:6px}
+.port-add:hover{border-color:var(--roxo)}
+.foto-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.foto .pill{z-index:1}
+.port-ver{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.port-ver img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px;display:block}
+.emp-logo,.cand-av{overflow:hidden}
+.emp-logo img,.cand-av img{width:100%;height:100%;object-fit:cover;display:block}
+.vaga-foto{display:block;width:100%;height:170px;object-fit:cover}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+</style>
+</head>
+<body>
+
+<div class="faixa" role="note"><b>Versão de teste do Toppa.</b> Não pedimos documentos reais nem cobramos nada. Use um apelido se preferir.</div>
+
+<header class="top">
+  <nav class="nav" aria-label="Principal">
+    <a class="logo" href="#topo"><span class="logo-q"><svg viewBox="0 0 120 120" width="100%" height="100%" aria-hidden="true"><rect width="120" height="120" rx="32" fill="#6D28D9"/><path d="M33 62 L52 81" stroke="#C4B5FD" stroke-width="15" stroke-linecap="round" fill="none"/><path d="M52 81 L89 41" stroke="#FFFFFF" stroke-width="15" stroke-linecap="round" fill="none"/></svg></span><span class="logo-t">toppa</span></a>
+    <div class="links">
+      <a href="#como-funciona">Como funciona</a>
+      <a href="#perfis">Perfis</a>
+      <a href="#reservar">Reservar equipe</a>
+      <a href="#pagamentos">Pagamentos</a>
+      <a href="#planos">Planos</a>
+      <a href="#duvidas">Dúvidas</a>
+    </div>
+    <div class="nav-acoes">
+      <button class="btn btn-borda" id="btn-painel" hidden>Painel de resultados</button>
+      <button class="btn btn-borda" id="btn-app" hidden>App freelancer</button>
+      <button class="btn btn-borda" id="btn-app-emp" hidden>App empresa</button>
+      <button class="btn btn-roxo" data-abrir="inicio"><span>Criar conta<span class="so-desk"> grátis</span></span></button>
+    </div>
+  </nav>
+</header>
+
+<main id="topo">
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-txt">
+        <span class="selo"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l7 4v6c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6l7-4z"/><path d="M9 12l2 2 4-4"/></svg>Perfis verificados com documento</span>
+        <h1>Você <span>topa</span>, a empresa <span>topa</span>. Pronto: <span>topou</span>, fechou.</h1>
+        <p class="lead">Deslize por perfis reais de freelancers e eventos de empresas. Cada pessoa é verificada, avaliada e pronta para trabalhar.</p>
+        <div class="portas">
+          <button class="porta on" data-abrir="freela">
+            <span class="pi"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/></svg></span>
+            <span><b>Sou freelancer</b><small>Criar meu perfil</small></span>
+          </button>
+          <button class="porta" data-abrir="empresa">
+            <span class="pi"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="#6D28D9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M3 13h18"/></svg></span>
+            <span><b>Quero contratar</b><small>Cadastrar minha empresa</small></span>
+          </button>
+        </div>
+        <a href="#perfis" style="align-self:flex-start;font-weight:600;text-decoration:none;min-height:44px;display:flex;align-items:center;gap:8px">Ver perfis em destaque <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+      <div class="hero-vis" aria-hidden="true">
+        <div class="fone"><div class="tela">
+          <div style="padding:22px 20px 12px;display:flex;justify-content:space-between;align-items:center"><span class="disp" style="font-weight:700;font-size:18px">Descobrir</span><span class="tag" style="font-size:12px">Eventos · BH</span></div>
+          <div style="margin:0 14px;border-radius:22px;overflow:hidden;border:1px solid #ECEAF2">
+            <div style="height:230px;background:#DDD3FA;display:flex;align-items:center;justify-content:center;position:relative" class="disp"><span style="font-size:68px;font-weight:700;color:#6D28D9">MA</span><span style="position:absolute;top:14px;left:14px;background:#fff;color:#5B21B6;font:600 12px Inter;padding:6px 10px;border-radius:999px">✓ Verificado</span></div>
+            <div style="padding:16px;display:flex;flex-direction:column;gap:8px"><div style="display:flex;justify-content:space-between"><b>Marina A., 27</b><b style="font-size:13px;color:#5B21B6">★ 4,9</b></div><span style="font-size:14px;color:#5A5470">Produtora de eventos · 128 trabalhos</span></div>
+          </div>
+          <div style="padding:18px 0 24px;display:flex;justify-content:center;gap:18px">
+            <span class="redondo" style="width:54px;height:54px"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="#6B6580" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span>
+            <span class="redondo" style="width:54px;height:54px;background:#6D28D9;border-color:#6D28D9"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
+          </div>
+        </div></div>
+        <div class="chip-topou"><span class="logo-q" style="width:34px;height:34px;font-size:16px"><svg viewBox="0 0 120 120" width="100%" height="100%" aria-hidden="true"><rect width="120" height="120" rx="32" fill="#6D28D9"/><path d="M33 62 L52 81" stroke="#C4B5FD" stroke-width="15" stroke-linecap="round" fill="none"/><path d="M52 81 L89 41" stroke="#FFFFFF" stroke-width="15" stroke-linecap="round" fill="none"/></svg></span><span><b style="font-size:14px;display:block">Topou!</b><span style="font-size:12px;color:#5A5470">Studio Aurora topou seu perfil</span></span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DOIS LADOS -->
+  <section class="sec">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Dois lados, um app</span>
+        <h2>Você entra e escolhe sua porta.</h2>
+        <p>Ao abrir o Toppa, você diz quem é. O app se adapta: uma experiência para quem oferece talento e outra para quem procura.</p>
+      </div>
+      <div class="grid2">
+        <div class="card">
+          <span class="ic-box"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/></svg></span>
+          <h3>Para freelancers</h3>
+          <p>Monte um perfil de verdade, voltado para negócios. Deslize pelos eventos e tope quem precisa de você.</p>
+          <div class="lista"><span>✓ Cadastro gratuito</span><span>✓ Selo de perfil verificado</span><span>✓ Reputação construída por avaliações</span></div>
+          <button class="btn btn-roxo" style="margin-top:22px" data-abrir="freela">Criar meu perfil</button>
+        </div>
+        <div class="card esc">
+          <span class="ic-box" style="background:#fff"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#6D28D9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M3 13h18"/></svg></span>
+          <h3>Para quem contrata</h3>
+          <p>Com uma assinatura, sua empresa publica eventos e encontra profissionais classificados e verificados.</p>
+          <div class="lista" style="color:#fff"><span>✓ Publique seus eventos</span><span>✓ Talentos ranqueados por avaliação</span><span>✓ Chat liberado quando os dois topam</span></div>
+          <button class="btn btn-branco" style="margin-top:22px" data-abrir="empresa">Cadastrar empresa</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMO FUNCIONA -->
+  <section class="sec" id="como-funciona" style="background:var(--nevoa)">
+    <div class="wrap">
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:20px;margin-bottom:36px">
+        <div class="sec-head" style="margin:0"><span class="eyebrow">Como funciona</span><h2>Do perfil ao trabalho fechado em 4 passos.</h2></div>
+        <div class="seg" role="group" aria-label="Escolha seu lado">
+          <button aria-pressed="true" data-lado="freela">Sou freelancer</button>
+          <button aria-pressed="false" data-lado="empresa">Quero contratar</button>
+        </div>
+      </div>
+      <div class="grid4" id="passos"></div>
+    </div>
+  </section>
+
+  <!-- PERFIS -->
+  <section class="sec" id="perfis">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Perfis em destaque</span>
+        <h2>Deslize e tope quem combina com o seu evento.</h2>
+        <p>Teste a experiência do app. Perfis criados nesta versão de teste também aparecem aqui.</p>
+      </div>
+      <div class="deck-area" id="deck"></div>
+    </div>
+  </section>
+
+  <!-- RESERVAR -->
+  <section class="sec" id="reservar" style="background:var(--roxo-noite);color:#fff">
+    <div class="wrap" style="display:flex;flex-wrap:wrap;gap:48px;align-items:center">
+      <div style="flex:1 1 420px;min-width:0" class="sec-head">
+        <span class="eyebrow" style="color:#C4B5FD">Para empresas</span>
+        <h2 style="color:#fff">Monte sua equipe para o evento em 4 toques.</h2>
+        <p style="color:#D6CCF5">Escolha o evento, as funções e a quantidade de pessoas, a data e confirme. O Toppa encontra freelancers verificados para cada vaga.</p>
+        <button class="btn btn-branco" data-abrir="reserva" style="align-self:flex-start;margin-top:8px">Reservar equipe</button>
+      </div>
+      <div style="flex:1 1 380px;min-width:0;display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div style="padding:20px;border-radius:18px;background:var(--roxo-med)"><b class="disp" style="font-size:28px">1</b><div style="margin-top:6px;font-weight:600">Escolher evento</div></div>
+        <div style="padding:20px;border-radius:18px;background:var(--roxo-med)"><b class="disp" style="font-size:28px">2</b><div style="margin-top:6px;font-weight:600">Função e quantidade</div></div>
+        <div style="padding:20px;border-radius:18px;background:var(--roxo-med)"><b class="disp" style="font-size:28px">3</b><div style="margin-top:6px;font-weight:600">Data e horário</div></div>
+        <div style="padding:20px;border-radius:18px;background:#fff;color:var(--roxo-noite)"><b class="disp" style="font-size:28px">4</b><div style="margin-top:6px;font-weight:600">Confirmar</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAGAMENTOS -->
+  <section class="sec" id="pagamentos">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Pagamento pelo app</span>
+        <h2>O contratante paga no app. O Toppa transfere direto para quem trabalhou.</h2>
+        <p>Ninguém precisa combinar Pix por fora ou cobrar depois. O dinheiro passa pelo Toppa e cai na conta do freelancer quando o turno é confirmado.</p>
+      </div>
+      <div class="fluxo-pg">
+        <div class="et"><span class="eti"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="#6D28D9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></span><h3>1. Empresa paga pelo app</h3><p>Ao reservar, escolhe pagar com depósito de 20% ou depois do evento.</p></div>
+        <div class="et"><span class="eti"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="#6D28D9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l7 4v6c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6l7-4z"/></svg></span><h3>2. O Toppa guarda o valor</h3><p>O pagamento fica protegido até o trabalho acontecer.</p></div>
+        <div class="et"><span class="eti"><svg class="ico" viewBox="0 0 24 24" fill="#6D28D9" aria-hidden="true"><path d="M12 2l3 6.5 7 .8-5.2 4.8 1.4 7L12 17.6 5.8 21l1.4-7L2 9.3l7-.8z"/></svg></span><h3>3. Turno confirmado e avaliado</h3><p>Depois de cada turno, os dois lados se avaliam no app.</p></div>
+        <div class="et" style="background:var(--roxo);border-color:var(--roxo);color:#fff"><span class="eti" style="background:#8B5CF6"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span><h3>4. Transferência direta</h3><p style="color:#E4DAFD">O valor vai do contratante para o freelancer. Quer receber em 24h? Taxa de 5%.</p></div>
+      </div>
+
+      <div class="sec-head" style="margin-top:72px;margin-bottom:0">
+        <span class="eyebrow">Como pagar sua reserva</span>
+        <h2>Duas formas de pagar a equipe.</h2>
+        <p>Exemplo com 3 bartenders a R$ 300 por turno (R$ 900 no total).</p>
+      </div>
+      <div class="preco-opc">
+        <div class="popc">
+          <span class="desc">Sem taxa</span>
+          <h3>Depósito de 20%</h3>
+          <div><span class="grande">R$ 180</span> <span class="s">agora</span></div>
+          <p class="s" style="margin:0">Você garante a equipe com 20% e paga os outros 80% (R$ 720) até 7 dias antes do evento.</p>
+          <ul><li>✓ Total de R$ 900, sem acréscimo</li><li>✓ Equipe garantida na hora</li><li>✓ Ideal para quem já tem o orçamento</li></ul>
+          <button class="btn btn-roxo" data-abrir="reserva" data-pag="deposito" style="margin-top:auto">Reservar</button>
+        </div>
+        <div class="popc dest">
+          <span class="desc" style="background:var(--roxo-med);color:#fff">+15%</span>
+          <h3>Pagar depois do evento</h3>
+          <div><span class="grande">R$ 1.035</span> <span class="s">em 30 dias</span></div>
+          <p class="s" style="margin:0">Nada agora. Você paga o valor total com acréscimo de 15% até 30 dias depois do evento.</p>
+          <ul><li>✓ Nenhum pagamento antecipado</li><li>✓ Mais fôlego no caixa</li><li>✓ O freelancer recebe normalmente</li></ul>
+          <button class="btn btn-branco" data-abrir="reserva" data-pag="depois" style="margin-top:auto">Reservar</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PLANOS -->
+  <section class="sec" id="planos" style="background:var(--nevoa)">
+    <div class="wrap">
+      <div class="sec-head center">
+        <span class="eyebrow">Planos para quem contrata</span>
+        <h2>Quanto mais tempo, menos você paga.</h2>
+        <p>Freelancers usam o Toppa de graça. Empresas escolhem como querem pagar a assinatura.</p>
+      </div>
+      <div class="planos" id="planos-lp"></div>
+      <div style="text-align:center;margin-top:30px"><button class="btn btn-roxo" data-abrir="empresa">Testar grátis como empresa</button></div>
+    </div>
+  </section>
+
+  <!-- DÚVIDAS -->
+  <section class="sec" id="duvidas">
+    <div class="wrap">
+      <div class="sec-head center"><span class="eyebrow">Dúvidas frequentes</span><h2>Ficou alguma pergunta?</h2></div>
+      <div class="faq">
+        <details open><summary>Quanto custa usar o Toppa?</summary><p>Para freelancers o app é gratuito. Empresas pagam a partir de R$ 26,93 por mês no plano anual, ou R$ 35,90 no mensal. Nesta versão de teste nada é cobrado.</p></details>
+        <details><summary>Preciso enviar documentos agora?</summary><p>Não. Na versão de teste a verificação é simulada: você só clica para ver como funciona. No app final, a verificação usa documento oficial e selfie com prova de vida.</p></details>
+        <details><summary>Como as notas são calculadas?</summary><p>Ao final de cada trabalho, os dois lados se avaliam de 1 a 5 estrelas. A nota do perfil é a média das avaliações, como nos apps de mobilidade.</p></details>
+        <details><summary>O que acontece quando os dois topam?</summary><p>O chat é liberado para combinarem data, local, horário e valor do trabalho direto pelo app.</p></details>
+        <details><summary>Posso cancelar a assinatura?</summary><p>Sim. Os planos podem ser cancelados a qualquer momento.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" style="padding-top:0">
+    <div class="wrap">
+      <div style="padding:56px 44px;border-radius:30px;background:var(--lilas);display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:28px">
+        <div style="flex:1 1 420px;min-width:0"><h2 style="margin:0 0 10px;font-size:clamp(28px,3.4vw,40px);color:var(--roxo-noite);letter-spacing:-1px">Seu próximo trabalho só está esperando você topar.</h2><p style="margin:0;color:var(--roxo-med);font-size:17px">Crie seu perfil de teste em menos de 2 minutos.</p></div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap"><button class="btn btn-roxo" data-abrir="freela">Sou freelancer</button><button class="btn btn-borda" data-abrir="empresa">Sou empresa</button></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap"><span class="logo"><span class="logo-q" style="width:30px;height:30px;font-size:16px"><svg viewBox="0 0 120 120" width="100%" height="100%" aria-hidden="true"><rect width="120" height="120" rx="32" fill="#6D28D9"/><path d="M33 62 L52 81" stroke="#C4B5FD" stroke-width="15" stroke-linecap="round" fill="none"/><path d="M52 81 L89 41" stroke="#FFFFFF" stroke-width="15" stroke-linecap="round" fill="none"/></svg></span><span class="logo-t" style="font-size:18px">toppa</span></span><span>Protótipo acadêmico · versão de teste · © 2026 Toppa</span></div></footer>
+
+<!-- MODAL -->
+<div class="modal-bg" id="modal-bg">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-titulo">
+    <div class="modal-top">
+      <span class="logo"><span class="logo-q" style="width:30px;height:30px;font-size:16px"><svg viewBox="0 0 120 120" width="100%" height="100%" aria-hidden="true"><rect width="120" height="120" rx="32" fill="#6D28D9"/><path d="M33 62 L52 81" stroke="#C4B5FD" stroke-width="15" stroke-linecap="round" fill="none"/><path d="M52 81 L89 41" stroke="#FFFFFF" stroke-width="15" stroke-linecap="round" fill="none"/></svg></span><span class="logo-t" id="modal-titulo" style="font-size:18px">toppa</span></span>
+      <button class="redondo" style="width:44px;height:44px" id="fechar" aria-label="Fechar"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="#4B4560" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+    <div class="prog" id="prog"></div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<!-- APP DO FREELANCER -->
+<div class="app" id="app" role="dialog" aria-modal="true" aria-label="Toppa, app do freelancer" hidden>
+  <header class="app-bar"><div class="app-bar-in">
+    <span class="logo"><span class="logo-q" style="width:34px;height:34px;font-size:18px"><svg viewBox="0 0 120 120" width="100%" height="100%" aria-hidden="true"><rect width="120" height="120" rx="32" fill="#6D28D9"/><path d="M33 62 L52 81" stroke="#C4B5FD" stroke-width="15" stroke-linecap="round" fill="none"/><path d="M52 81 L89 41" stroke="#FFFFFF" stroke-width="15" stroke-linecap="round" fill="none"/></svg></span><span class="logo-t" style="font-size:20px">toppa</span></span>
+    <div class="app-tabs" role="tablist" aria-label="Seções do app" id="app-tabs"></div>
+    <button class="redondo" style="width:44px;height:44px;flex:none" id="app-sair" aria-label="Sair do app"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="#4B4560" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  </div></header>
+  <main class="app-main" id="app-main"></main>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="config.js"></script>
+<script>
+(function(){
+'use strict';
+var MENSAL = 35.90;
+var PLANOS = [
+  {id:'mensal', nome:'Mensal', meses:1, desc:0},
+  {id:'trimestral', nome:'Trimestral', meses:3, desc:0.10},
+  {id:'semestral', nome:'Semestral', meses:6, desc:0.15},
+  {id:'anual', nome:'Anual', meses:12, desc:0.25}
+];
+function brl(v){return 'R$ '+fmtNum(v);}
+function porMes(p){return Math.round(MENSAL*(1-p.desc)*100)/100;}
+function total(p){return Math.round(MENSAL*(1-p.desc)*p.meses*100)/100;}
+function economia(p){return Math.round((MENSAL*p.meses-total(p))*100)/100;}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+var $=function(s,el){return (el||document).querySelector(s);};
+var $$=function(s,el){return Array.prototype.slice.call((el||document).querySelectorAll(s));};
+var STAR='<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="FILL" d="M12 2l3 6.5 7 .8-5.2 4.8 1.4 7L12 17.6 5.8 21l1.4-7L2 9.3l7-.8z"/></svg>';
+var CHECK='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>';
+
+function toast(msg){var t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(toast._t);toast._t=setTimeout(function(){t.classList.remove('show');},3200);}
+
+/* ---------- Dados/persistência ---------- */
+var db=null, user=null, uid=null, podeGravar=null;
+var meuCadastro = {};
+try{ meuCadastro = JSON.parse(localStorage.getItem('toppa_teste')||'{}')||{}; }catch(e){ meuCadastro={}; }
+function salvarLocal(){ try{ localStorage.setItem('toppa_teste', JSON.stringify(meuCadastro)); }catch(e){} }
+
+/* ---------- Banco de dados público (Supabase) ---------- */
+function idDoDispositivo(){
+  var k='toppa_dispositivo', v=null;
+  try{ v=localStorage.getItem(k); }catch(e){}
+  if(!v || !/^d_[a-z0-9]{8,40}$/.test(v)){
+    var a=new Uint8Array(12); (window.crypto||window.msCrypto).getRandomValues(a);
+    v='d_'+Array.prototype.map.call(a,function(x){return ('0'+x.toString(16)).slice(-2);}).join('');
+    try{ localStorage.setItem(k,v); }catch(e){}
+  }
+  return v;
+}
+function criarBancoSupabase(cfg){
+  var base=String(cfg.supabaseUrl).replace(/\/+$/,'')+'/rest/v1/registros';
+  var H={'apikey':cfg.supabaseKey,'Authorization':'Bearer '+cfg.supabaseKey,'Content-Type':'application/json'};
+  var TIPO={perfis:'perfil',eventos:'evento',cadastros:'cadastro',feedbacks:'feedback',lista:'lista',visitas:'visita',topadas:'topada'};
+  function inserir(tipo,dados){
+    var h={}; for(var k in H) h[k]=H[k]; h['Prefer']='return=minimal';
+    return fetch(base,{method:'POST',headers:h,body:JSON.stringify({tipo:tipo,dispositivo:uid,dados:dados})})
+      .then(function(r){ if(!r.ok) throw new Error('HTTP '+r.status); });
+  }
+  function ler(tipo){
+    return fetch(base+'?select=dispositivo,dados,criado&tipo=eq.'+encodeURIComponent(tipo)+'&order=criado.desc&limit=300',{headers:H})
+      .then(function(r){ return r.ok? r.json() : []; })
+      .then(function(rows){
+        var vistos={}, docs=[];
+        (rows||[]).forEach(function(r){ if(!r || vistos[r.dispositivo]) return; vistos[r.dispositivo]=1; docs.push({id:r.dispositivo,exists:true,data:function(){return r.dados;}}); });
+        return {docs:docs,size:docs.length,empty:!docs.length};
+      });
+  }
+  return {
+    doc:function(p){ var c=String(p).split('/')[0], t=TIPO[c]||c;
+      return {get:function(){return Promise.resolve({exists:false,data:function(){return undefined;}});},set:function(d){return inserir(t,d);},update:function(d){return inserir(t,d);}}; },
+    collection:function(c){ var t=TIPO[c]||c, q={
+      limit:function(){return q;}, orderBy:function(){return q;}, where:function(){return q;},
+      get:function(){ return ler(t); },
+      onSnapshot:function(n){
+        var parar=false;
+        function tick(){ if(parar||document.hidden) return; ler(t).then(function(s){ if(!parar) n(s); }).catch(function(){}); }
+        tick(); var it=setInterval(tick,20000);
+        document.addEventListener('visibilitychange',function(){ if(!document.hidden) tick(); });
+        return function(){ parar=true; clearInterval(it); };
+      }}; return q; }
+  };
+}
+function iniciarCapacidades(){
+  uid=idDoDispositivo();
+  var cfg=window.TOPPA_CONFIG||{};
+  if(!cfg.supabaseUrl || !cfg.supabaseKey || /COLE_AQUI/.test(cfg.supabaseUrl+cfg.supabaseKey)) return;
+  db=criarBancoSupabase(cfg);
+  registrarVisita();
+  ouvirPerfis();
+  ouvirEventos();
+}
+function registrarVisita(){
+  var k='toppa_visita_sessao';
+  try{ if(sessionStorage.getItem(k)) return; sessionStorage.setItem(k,'1'); }catch(e){}
+  var ref=db.doc('visitas/'+uid);
+  ref.get().then(function(s){
+    var agora=new Date().toISOString();
+    var d=s.exists? s.data(): null;
+    return ref.set({primeira: d&&d.primeira? d.primeira: agora, ultima: agora, vezes: (d&&d.vezes? d.vezes:0)+1});
+  }).catch(function(){});
+}
+function gravarCadastro(){
+  salvarLocal();
+  if(!db || !uid) return Promise.resolve(false);
+  var corpo={atualizado:new Date().toISOString()};
+  function semFotos(o){ var c={}; for(var k in o){ if(k!=='foto'&&k!=='fotos'&&k!=='logo'&&k!=='fotoEv') c[k]=o[k]; } c.temFoto=!!(o.foto||o.logo); return c; }
+  if(meuCadastro.freela) corpo.freela=semFotos(meuCadastro.freela);
+  if(meuCadastro.empresa) corpo.empresa=semFotos(meuCadastro.empresa);
+  var p1=db.doc('cadastros/'+uid).set(corpo);
+  var agora=new Date().toISOString();
+  var p2=meusPerfis().length? db.doc('perfis/'+uid).set({lista:caberNoLimite(meusPerfis().slice(-10),['foto','fotos']),criado:agora}) : Promise.resolve();
+  var p3=meusEventos().length? db.doc('eventos/'+uid).set({empresa:empresaInfo(),lista:caberNoLimite(meusEventos().slice(-10),['foto']),criado:agora}) : Promise.resolve();
+  return Promise.all([p1,p2,p3]).then(function(){return true;}).catch(function(){return false;});
+}
+function perfilPublico(f){
+  return {foto:f.foto||'', fotos:(f.fotos||[]).slice(0,3), nome:f.nome, idade:f.idade||'', papel:f.titulo, area:f.area, disp:f.disp||[], cidade:f.cidade, anos:f.anos||'', sobre:f.sobre||'', tags:f.habilidades||[], criado:new Date().toISOString()};
+}
+
+/* ---------- Passos (como funciona) ---------- */
+var PASSOS={
+  freela:[['Crie seu perfil profissional','Experiência, portfólio, especialidades e disponibilidade em um perfil pensado para negócios.'],['Verifique sua identidade','Documento e selfie confirmam que você é você. Aprovado, ganha o selo de verificado.'],['Deslize pelas oportunidades','Veja eventos perto de você. Curtiu? Toque em Topar e espere a empresa topar também.'],['Trabalhe e seja avaliado','Cada trabalho concluído vira avaliação e sobe sua classificação.']],
+  empresa:[['Escolha seu plano','Mensal, trimestral, semestral ou anual. Quanto mais longo, maior o desconto.'],['Publique seu evento','Data, local, cachê e o tipo de profissional que você procura.'],['Deslize por talentos','Freelancers verificados e ranqueados por nota. Os dois toparam? O chat é liberado.'],['Contrate e avalie','Feche o trabalho e avalie o profissional, ajudando toda a comunidade.']]
+};
+function renderPassos(lado){
+  $('#passos').innerHTML=PASSOS[lado].map(function(p,i){return '<div class="passo"><span class="n">'+(i+1)+'</span><h3>'+p[0]+'</h3><p>'+p[1]+'</p></div>';}).join('');
+  $$('.seg [data-lado]').forEach(function(b){b.setAttribute('aria-pressed', b.dataset.lado===lado?'true':'false');});
+}
+$$('.seg [data-lado]').forEach(function(b){b.addEventListener('click',function(){renderPassos(b.dataset.lado);});});
+renderPassos('freela');
+
+/* ---------- Planos da landing ---------- */
+function htmlPlano(p, on, compacto){
+  var badge = p.id==='anual'? '<span class="badge">Melhor preço</span>' : (p.id==='semestral'? '<span class="badge">Mais escolhido</span>':'');
+  var desc = p.desc? '<span class="desc">'+Math.round(p.desc*100)+'% de desconto</span>' : '<span class="desc" style="visibility:hidden">—</span>';
+  var det = p.meses===1? 'Cobrado todo mês. Cancele quando quiser.' : brl(total(p))+' a cada '+p.meses+' meses · economia de '+brl(economia(p));
+  return '<button class="plano'+(on?' on':'')+'" data-plano="'+p.id+'" aria-pressed="'+(on?'true':'false')+'">'+badge+'<span class="nome">'+p.nome+'</span>'+desc+'<span class="preco"><b>'+brl(porMes(p)).replace('R$ ','R$&nbsp;')+'</b><small>/mês</small></span><span class="det">'+det+'</span></button>';
+}
+var planoLP='anual';
+function renderPlanosLP(){
+  $('#planos-lp').innerHTML=PLANOS.map(function(p){return htmlPlano(p,p.id===planoLP);}).join('');
+  $$('#planos-lp [data-plano]').forEach(function(b){b.addEventListener('click',function(){planoLP=b.dataset.plano;renderPlanosLP();});});
+}
+renderPlanosLP();
+
+/* ---------- Deck de perfis ---------- */
+var BASE=[
+  {ini:'MA',area:'Eventos',topa:true,nome:'Marina Alves',idade:27,papel:'Produtora de eventos',cidade:'Funcionários, Belo Horizonte',nota:4.9,aval:112,trab:128,anos:'5 anos',recont:'86%',cor:'#DDD3FA',tags:['Casamentos','Corporativo','Cerimonial'],sobre:'Organizo eventos sociais e corporativos de 50 a 600 convidados. Cuido do cronograma, fornecedores e equipe no dia.',qual:[['Pontualidade',94],['Organização',88],['Comunicação',71]],dist:[89,8,2,1,0]},
+  {ini:'RS',area:'Fotografia e vídeo',topa:false,nome:'Rafael Souza',idade:31,papel:'Fotógrafo de eventos',cidade:'Sion, Belo Horizonte',nota:4.8,aval:203,trab:241,anos:'8 anos',recont:'79%',cor:'#E7E0FB',tags:['Shows','Corporativo','Edição rápida'],sobre:'Fotografia de eventos com prévias em 24 horas. Equipamento próprio e segundo fotógrafo para eventos grandes.',qual:[['Qualidade das fotos',162],['Entrega no prazo',140],['Discrição',97]],dist:[84,12,3,1,0]},
+  {ini:'LM',area:'Gastronomia',topa:true,nome:'Lucas Martins',idade:29,papel:'Bartender',cidade:'Vila da Serra, Nova Lima',nota:4.9,aval:176,trab:190,anos:'6 anos',recont:'91%',cor:'#E4DAFD',tags:['Drinks autorais','Open bar','Casamentos'],sobre:'Cardápio de drinks autorais e clássicos. Levo o bar móvel completo e monto a carta junto com o cliente.',qual:[['Simpatia',150],['Higiene',131],['Drinks criativos',118]],dist:[91,7,1,1,0]},
+  {ini:'JC',area:'Design',topa:false,nome:'Juliana Costa',idade:24,papel:'Designer gráfica',cidade:'Eldorado, Contagem',nota:4.7,aval:58,trab:64,anos:'3 anos',recont:'72%',cor:'#D6CCF5',tags:['Identidade visual','Social media','Convites'],sobre:'Identidades visuais e peças para eventos: convites, banners, crachás e posts.',qual:[['Criatividade',49],['Agilidade',41],['Escuta do cliente',33]],dist:[78,15,5,2,0]},
+  {ini:'CM',area:'Gastronomia',topa:true,nome:'Carla Mendes',idade:26,papel:'Garçonete',cidade:'Buritis, Belo Horizonte',nota:4.8,aval:134,trab:152,anos:'4 anos',recont:'88%',cor:'#E7E0FB',tags:['Serviço à francesa','Coquetel volante','Casamentos'],sobre:'Garçonete de eventos sociais e corporativos. Experiência com serviço à francesa e volante.',qual:[['Simpatia',120],['Agilidade',97],['Pontualidade',90]],dist:[86,11,2,1,0]},
+  {ini:'BO',area:'Recepção',topa:true,nome:'Bruno Oliveira',idade:23,papel:'Recepcionista bilíngue',cidade:'Centro, Belo Horizonte',nota:4.7,aval:61,trab:70,anos:'2 anos',recont:'75%',cor:'#DDD3FA',tags:['Inglês fluente','Credenciamento','Congressos'],sobre:'Recepção e credenciamento em feiras e congressos, em português e inglês.',qual:[['Educação',55],['Idiomas',48],['Boa apresentação',40]],dist:[79,16,4,1,0]},
+  {ini:'TR',area:'Música e DJ',topa:false,nome:'Thiago Rocha',idade:30,papel:'DJ',cidade:'Santa Tereza, Belo Horizonte',nota:4.9,aval:95,trab:110,anos:'7 anos',recont:'84%',cor:'#E4DAFD',tags:['Casamentos','Anos 2000','MPB e pop'],sobre:'DJ de festas e casamentos. Monto o set junto com os noivos e levo som próprio se precisar.',qual:[['Animação',88],['Pontualidade',70],['Repertório',66]],dist:[90,8,1,1,0]},
+  {ini:'FL',area:'Eventos',topa:true,nome:'Fernanda Lima',idade:34,papel:'Cerimonialista',cidade:'Lourdes, Belo Horizonte',nota:5.0,aval:72,trab:80,anos:'10 anos',recont:'93%',cor:'#D6CCF5',tags:['Casamentos','Roteiro','Coordenação'],sobre:'Cerimonialista de casamentos e convenções. Cuido do roteiro e da equipe do começo ao fim.',qual:[['Organização',70],['Calma sob pressão',61],['Comunicação',58]],dist:[96,4,0,0,0]}
+];
+var idx=0; var topados=0;
+
+/* ---------- Fotos ---------- */
+var IC_CAMERA='<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13.5" r="3.5"/></svg>';
+var IC_X='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+function fotoSegura(u){ return (typeof u==='string' && u.length<400000 && /^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+\/=]+$/.test(u)) ? u : ''; }
+function reduzirFoto(file,max,quadrado,q){
+  return new Promise(function(res,rej){
+    if(!file || !/^image\//.test(file.type||'')) return rej('tipo');
+    if(file.size>25*1024*1024) return rej('grande');
+    var url=URL.createObjectURL(file), img=new Image();
+    img.onload=function(){
+      var w=img.naturalWidth,h=img.naturalHeight,sx=0,sy=0,sw=w,sh=h;
+      if(quadrado){ var m=Math.min(w,h); sx=(w-m)/2; sy=(h-m)/2; sw=sh=m; }
+      var k=Math.min(1,max/Math.max(sw,sh)), c=document.createElement('canvas');
+      c.width=Math.max(1,Math.round(sw*k)); c.height=Math.max(1,Math.round(sh*k));
+      var ctx=c.getContext('2d'); ctx.fillStyle='#FFFFFF'; ctx.fillRect(0,0,c.width,c.height);
+      ctx.drawImage(img,sx,sy,sw,sh,0,0,c.width,c.height);
+      URL.revokeObjectURL(url); res(c.toDataURL('image/jpeg',q||0.72));
+    };
+    img.onerror=function(){ URL.revokeObjectURL(url); rej('ler'); };
+    img.src=url;
+  });
+}
+function msgErroFoto(e){ return e==='tipo'?'Esse arquivo não é uma imagem. Escolha uma foto JPG ou PNG.' : e==='grande'?'Essa foto é muito grande. Escolha uma de até 25 MB.' : 'Não foi possível abrir essa foto. Tente outra, em JPG ou PNG.'; }
+function campoFoto(id,label,valor,redondo,ajuda){
+  return '<div class="campo"><span class="lbl-f" id="'+id+'-l">'+label+'</span><div class="foto-up">'+
+    '<div class="foto-prev'+(redondo?' redondo':'')+'" id="'+id+'-prev">'+(valor?'<img src="'+valor+'" alt="Prévia da foto escolhida">':IC_CAMERA)+'</div>'+
+    '<div class="foto-acoes"><label class="btn btn-borda" for="'+id+'">'+(valor?'Trocar foto':'Escolher foto')+'</label><input type="file" id="'+id+'" accept="image/*" class="vh" aria-labelledby="'+id+'-l">'+
+    (valor?'<button type="button" class="btn btn-ghost" id="'+id+'-rem">Remover</button>':'')+
+    '<span class="ajuda">'+(ajuda||'JPG ou PNG. A foto é ajustada automaticamente.')+'</span></div></div></div>';
+}
+function ligarFoto(id,opts){
+  function bind(){
+    var inp=$('#'+id); if(!inp) return;
+    inp.addEventListener('change',function(){
+      var f=inp.files&&inp.files[0]; if(!f) return;
+      var lb=$('label[for="'+id+'"]'); if(lb) lb.textContent='Carregando…';
+      reduzirFoto(f,opts.max||480,opts.quadrado,opts.q).then(function(d){ opts.set(d); refazer(); try{erro('');}catch(e){} })
+        .catch(function(e){ refazer(); try{erro(msgErroFoto(e));}catch(x){ toast(msgErroFoto(e)); } });
+    });
+    var r=$('#'+id+'-rem'); if(r) r.addEventListener('click',function(){ opts.set(''); refazer(); });
+  }
+  function refazer(){
+    var campo=$('#'+id).closest('.campo'), t=document.createElement('div');
+    t.innerHTML=campoFoto(id,opts.label,opts.get(),opts.redondo,opts.ajuda);
+    campo.replaceWith(t.firstChild); bind();
+  }
+  bind();
+}
+function campoPortfolio(id,fotos){
+  return '<div class="campo"><span class="lbl-f" id="'+id+'-l">Fotos do seu trabalho <span style="font-weight:500;color:var(--suave)">(até 3, opcional)</span></span>'+
+    '<div class="port-grid">'+fotos.map(function(u,i){ return '<div class="port-item"><img src="'+u+'" alt="Foto '+(i+1)+' do seu trabalho"><button type="button" class="port-rem" data-prem="'+i+'" aria-label="Remover foto '+(i+1)+'">'+IC_X+'</button></div>'; }).join('')+
+    (fotos.length<3?'<label class="port-add" for="'+id+'">'+IC_CAMERA+'<span>Adicionar foto</span></label>':'')+'</div>'+
+    '<input type="file" id="'+id+'" accept="image/*" multiple class="vh" aria-labelledby="'+id+'-l">'+
+    '<span class="ajuda">Mostre trabalhos que você já fez: eventos, drinks, fotos, artes.</span></div>';
+}
+function ligarPortfolio(id,lista){
+  function bind(){
+    var inp=$('#'+id); if(!inp) return;
+    inp.addEventListener('change',function(){
+      var arqs=Array.prototype.slice.call(inp.files||[]).slice(0,3-lista.length); if(!arqs.length) return;
+      var ad=$('label.port-add[for="'+id+'"] span'); if(ad) ad.textContent='Carregando…';
+      var falhou=null;
+      arqs.reduce(function(p,f){ return p.then(function(){ return reduzirFoto(f,420,false,0.66).then(function(d){ lista.push(d); }).catch(function(e){ falhou=e; }); }); },Promise.resolve())
+        .then(function(){ refazer(); try{ erro(falhou?msgErroFoto(falhou):''); }catch(x){} });
+    });
+    $$('[data-prem]',$('#'+id).closest('.campo')).forEach(function(x){ x.addEventListener('click',function(){ lista.splice(Number(x.dataset.prem),1); refazer(); }); });
+  }
+  function refazer(){ var campo=$('#'+id).closest('.campo'), t=document.createElement('div'); t.innerHTML=campoPortfolio(id,lista); campo.replaceWith(t.firstChild); bind(); }
+  bind();
+}
+function fotoOuIni(p){ return p.foto? '<img class="foto-img" src="'+p.foto+'" alt="Foto de '+esc(p.nome)+'">' : esc(p.ini); }
+function avatarMini(p){ return p.foto? '<img src="'+p.foto+'" alt="">' : esc(p.ini); }
+function portfolioHtml(p){ return p.fotos&&p.fotos.length? '<div class="caixa"><h4>Portfólio</h4><div class="port-ver">'+p.fotos.map(function(u,i){return '<img src="'+u+'" alt="Trabalho '+(i+1)+' de '+esc(p.nome)+'">';}).join('')+'</div></div>' : ''; }
+/* mantém cada documento abaixo do limite do banco */
+function caberNoLimite(lista,campos){
+  var L=lista.map(function(x){ var o={}; for(var k in x) o[k]=x[k]; return o; });
+  function tam(){ try{ return JSON.stringify(L).length; }catch(e){ return 0; } }
+  for(var i=0;i<L.length && tam()>230000;i++){ campos.forEach(function(c){ if(L[i][c]) L[i][c]= Array.isArray(L[i][c])?[]:''; }); }
+  return L;
+}
+var OCULTOS=['u_vqjvcJhK9AL_RTedH0bX4w'];
+
+/* ---------- Cadastros de teste visíveis para todos ---------- */
+/* VITRINE: cadastros de teste copiados do banco do site, para aparecerem também para quem não está logado. */
+var VITRINE={perfis:[],eventos:[]};
+var docsPerfis={}, docsEventos={};
+VITRINE.perfis.forEach(function(d){ docsPerfis[d.id]=d.data; });
+VITRINE.eventos.forEach(function(d){ docsEventos[d.id]=d.data; });
+function listaDoDoc(data){ return data && data.lista ? data.lista : (data ? [data] : []); }
+function perfisDeTeste(){
+  var out=[];
+  Object.keys(docsPerfis).forEach(function(id){ if(id===uid || OCULTOS.indexOf(id)>=0) return; listaDoDoc(docsPerfis[id]).forEach(function(p,i){ var o=deParaPerfil(p); o.key='t-'+id+'-'+i; out.push(o); }); });
+  return out;
+}
+function eventosDeTeste(){
+  var out=[];
+  Object.keys(docsEventos).forEach(function(id){
+    if(id===uid || OCULTOS.indexOf(id)>=0) return; var d=docsEventos[id], emp=d&&d.empresa? d.empresa : d;
+    listaDoDoc(d).forEach(function(ev,i){ if(ev && ev.evento) out.push(eventoDeEmpresa(ev,emp,id+'-'+i)); });
+  });
+  return out;
+}
+function meusPerfis(){
+  if(meuCadastro.perfisCriados && meuCadastro.perfisCriados.length) return meuCadastro.perfisCriados;
+  return meuCadastro.freela? [perfilPublico(meuCadastro.freela)] : [];
+}
+function eventoDosDados(e){ return {id:'e'+Date.now().toString(36),foto:e.fotoEv||'',evento:e.evento,areaBusca:e.areaBusca,vagas:e.vagas,data:e.data,inicio:e.inicio,fim:e.fim,evlocal:e.evlocal,cache:Number(e.cache)||0,funciona:e.funciona||'',criado:new Date().toISOString()}; }
+function meusEventos(){
+  if(meuCadastro.eventos && meuCadastro.eventos.length) return meuCadastro.eventos;
+  var e=meuCadastro.empresa; if(!(e&&e.evento)) return [];
+  var ev=eventoDosDados(e); ev.id='e1'; meuCadastro.eventos=[ev]; salvarLocal(); return meuCadastro.eventos;
+}
+function empresaInfo(){ var e=meuCadastro.empresa||{}; return {logo:e.logo||'',nome:e.nome||'',segmento:e.segmento||'',cidade:e.cidade||''}; }
+
+function iniciais(n){return String(n||'?').trim().split(/\s+/).slice(0,2).map(function(x){return x[0]||'';}).join('').toUpperCase()||'?';}
+function deParaPerfil(d, meu){
+  return {foto:fotoSegura(d.foto), fotos:(d.fotos||[]).map(fotoSegura).filter(Boolean).slice(0,3), area:d.area||'',ini:iniciais(d.nome),nome:d.nome||'Sem nome',idade:d.idade||'',papel:d.papel||d.titulo||'Freelancer',cidade:d.cidade||'',nota:null,aval:0,trab:0,anos:d.anos? (/^(1|Menos de 1)$/.test(String(d.anos))? d.anos+' ano' : d.anos+' anos') :'—',recont:'—',cor:'#EDE7FB',tags:(d.tags||d.habilidades||[]).slice(0,5),sobre:d.sobre||'',qual:[],dist:[0,0,0,0,0],novo:true,meu:!!meu};
+}
+function listaDeck(){
+  var meu = meusPerfis().slice().reverse().map(function(p){return deParaPerfil(p,true);});
+  return meu.concat(perfisDeTeste(), BASE);
+}
+function ouvirPerfis(){
+  try{
+    db.collection('perfis').limit(100).onSnapshot(function(snap){
+      snap.docs.forEach(function(d){ if(d.exists) docsPerfis[d.id]=d.data(); });
+      renderDeck();
+      if(!$('#app').hidden) renderApp();
+    }, function(){});
+  }catch(e){}
+}
+function estrelasHtml(n){var cheio=Math.round(n||0),h='';for(var i=1;i<=5;i++){h+=STAR.replace('FILL', i<=cheio?'#6D28D9':'#DCD3F5');}return h;}
+function renderDeck(){
+  var L=listaDeck(); var el=$('#deck');
+  if(idx>=L.length){
+    el.innerHTML='<div class="caixa" style="flex:1;text-align:center;padding:48px"><h3 class="disp" style="margin:0 0 8px;font-size:24px">Você viu todos os perfis</h3><p style="color:var(--suave);margin:0 0 18px">Que tal criar o seu?</p><div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap"><button class="btn btn-borda" id="recomecar">Recomeçar</button><button class="btn btn-roxo" data-abrir="freela">Criar meu perfil</button></div></div>';
+    $('#recomecar').addEventListener('click',function(){idx=0;renderDeck();});
+    ligarAbrir(el); return;
+  }
+  var p=L[idx];
+  var notaBloco = p.novo
+    ? '<div><b class="disp" style="font-size:20px">Novo no Toppa</b><div style="font-size:13px;color:var(--suave)">Ainda sem avaliações</div></div><div style="text-align:right"><b class="disp" style="font-size:26px;color:var(--roxo)">0</b><div style="font-size:13px;color:var(--suave)">trabalhos feitos</div></div>'
+    : '<div><div style="display:flex;align-items:center;gap:8px"><b class="disp" style="font-size:26px">'+p.nota.toFixed(1).replace('.',',')+'</b><span class="estrelas" role="img" aria-label="Nota '+p.nota.toFixed(1).replace('.',',')+' de 5">'+estrelasHtml(p.nota)+'</span></div><div style="font-size:13px;color:var(--suave)">'+p.aval+' avaliações</div></div><div style="text-align:right"><b class="disp" style="font-size:26px;color:var(--roxo)">'+p.trab+'</b><div style="font-size:13px;color:var(--suave)">trabalhos feitos</div></div>';
+  var qual = p.qual.length? p.qual.map(function(q){return '<div style="display:flex;justify-content:space-between;padding:11px 14px;border-radius:12px;background:var(--nevoa);font-size:14px;font-weight:600"><span>✓ '+esc(q[0])+'</span><span style="color:var(--roxo-esc)">'+q[1]+'×</span></div>';}).join('') : '<p style="margin:0;color:var(--suave);font-size:14px">As qualidades aparecem conforme o perfil recebe avaliações.</p>';
+  var barras = p.novo? '' : '<div class="caixa"><h4>Distribuição das notas</h4>'+p.dist.map(function(v,i){return '<div style="display:flex;align-items:center;gap:10px;margin:6px 0;font-size:13px"><span style="width:28px;font-weight:600">'+(5-i)+'★</span><span class="barra"><i style="width:'+v+'%"></i></span><span style="width:36px;text-align:right;color:var(--suave)">'+v+'%</span></div>';}).join('')+'</div>';
+  el.innerHTML=
+  '<div style="flex:1 1 360px;max-width:440px;min-width:0">'+
+    '<div class="cartao">'+
+      '<div class="foto" style="background:'+p.cor+'">'+fotoOuIni(p)+'<span class="pill" style="left:16px;background:#fff;color:var(--roxo-esc)">'+(p.novo?'Teste':'✓ Verificado')+'</span><span class="pill" style="right:16px;background:var(--roxo-noite);color:#fff">'+(idx+1)+' de '+L.length+'</span></div>'+
+      '<div class="corpo"><div><b class="disp" style="font-size:26px">'+esc(p.nome)+(p.idade?', '+esc(p.idade):'')+'</b>'+(p.meu?' <span class="tag" style="background:var(--lilas);color:var(--roxo-esc)">Seu perfil</span>':'')+'<div style="color:var(--texto);font-weight:500;margin-top:2px">'+esc(p.papel)+'</div><div style="font-size:14px;color:var(--suave)">'+esc(p.cidade)+'</div></div>'+
+      '<div class="nota">'+notaBloco+'</div>'+
+      '<div style="display:flex;flex-wrap:wrap;gap:8px">'+p.tags.map(function(t){return '<span class="tag">'+esc(t)+'</span>';}).join('')+'</div></div>'+
+      '<div class="overlay-topou" id="ov"><span class="disp" style="font-size:44px;font-weight:700;letter-spacing:-1px">Topou!</span><span style="color:#D6CCF5;max-width:280px;line-height:1.5">Você topou e '+esc(String(p.nome).split(' ')[0])+' topou também. O chat foi liberado.</span><button class="btn btn-branco" id="ov-seguir" style="min-width:220px">Continuar descobrindo</button></div>'+
+    '</div>'+
+    '<div class="acoes">'+
+      '<button class="redondo" style="width:48px;height:48px" id="d-voltar" aria-label="Perfil anterior"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="#6B6580" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-2"/></svg></button>'+
+      '<button class="redondo" style="width:62px;height:62px" id="d-passar" aria-label="Passar perfil"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#4B4560" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>'+
+      '<button class="redondo" style="width:62px;height:62px;background:var(--roxo);border-color:var(--roxo)" id="d-topar" aria-label="Topar"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg></button>'+
+    '</div>'+
+    '<p style="text-align:center;font-size:14px;color:var(--suave);margin:12px 0 0">Você já topou <b style="color:var(--roxo)">'+topados+'</b> perfil(is)</p>'+
+  '</div>'+
+  '<div class="detalhes">'+
+    '<div class="mini"><div><small>Trabalhos</small><b>'+p.trab+'</b></div><div><small>Experiência</small><b>'+esc(p.anos)+'</b></div><div><small>Recontratação</small><b>'+esc(p.recont)+'</b></div></div>'+
+    portfolioHtml(p)+'<div class="caixa"><h4>Sobre</h4><p style="margin:0 0 16px;color:var(--texto);line-height:1.6">'+(esc(p.sobre)||'—')+'</p><h4>Qualidades mais elogiadas</h4><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px">'+qual+'</div></div>'+
+    barras+
+  '</div>';
+  $('#d-passar').addEventListener('click',function(){idx++;renderDeck();});
+  $('#d-voltar').addEventListener('click',function(){idx=Math.max(0,idx-1);renderDeck();});
+  $('#d-topar').addEventListener('click',function(){topados++;$('#ov').classList.add('show');$('#ov-seguir').focus();});
+  $('#ov-seguir').addEventListener('click',function(){idx++;renderDeck();});
+}
+renderDeck();
+
+/* ---------- Modal / cadastro ---------- */
+var estado={fluxo:null, passo:0, f:{}, e:{}};
+var AREAS=['Eventos','Fotografia e vídeo','Gastronomia','Design','Marketing','Música e DJ','Recepção','Tecnologia','Outra'];
+var HAB={
+  'Eventos':['Cerimonial','Produção','Coordenação','Montagem','Casamentos','Corporativo'],
+  'Fotografia e vídeo':['Fotografia','Filmagem','Drone','Edição','Ensaios','Cobertura ao vivo'],
+  'Gastronomia':['Bartender','Garçom','Chef','Confeitaria','Churrasco','Buffet'],
+  'Design':['Identidade visual','Social media','Convites','Ilustração','Motion','UX/UI'],
+  'Marketing':['Redes sociais','Tráfego pago','Copywriting','Influência','Promoção','Pesquisa'],
+  'Música e DJ':['DJ','Banda','Voz e violão','Som e luz','MC','Sax'],
+  'Recepção':['Recepção bilíngue','Credenciamento','Hostess','Promotor(a)','Atendimento','Libras'],
+  'Tecnologia':['Desenvolvimento','Suporte','Dados','Streaming','Automação','Sites'],
+  'Outra':['Organização','Comunicação','Vendas','Logística','Limpeza','Segurança']
+};
+var SEGMENTOS=['Eventos e cerimonial','Agência de marketing','Bar ou restaurante','Hotel','Empresa de tecnologia','Varejo','Produtora','Outro'];
+var TAMANHOS=['Só eu','2 a 10 pessoas','11 a 50 pessoas','Mais de 50 pessoas'];
+
+var concluiu=false, avaliou=false, pediuFeedback=false;
+function pedirFeedback(){ pediuFeedback=true; setTimeout(function(){ if(!$('#modal-bg').classList.contains('show') && $('#app').hidden) abrir('feedback'); },350); }
+try{ avaliou = localStorage.getItem('toppa_avaliou')==='1'; }catch(e){}
+function abrir(fluxo, extra){
+  estado={fluxo:null,passo:0,f:{habilidades:[]},e:{plano:'anual',inicio:'18:00',fim:'23:00',vagas:'2'},r:{itens:FUNCOES.map(function(f){return {nome:f[0],ref:Number(f[1]),valor:0,qtd:0};}),inicio:'18:00',fim:'23:00',pag:(extra&&extra.pag)||'deposito'},fb:{gostou:[]}};
+  if(fluxo==='freela'||fluxo==='empresa'||fluxo==='reserva'||fluxo==='feedback'){estado.fluxo=fluxo;}
+  if(extra&&extra.soEvento&&meuCadastro.empresa){ estado.soEvento=true; estado.passo=1; var me=meuCadastro.empresa; ['logo','nome','segmento','cidade','tamanho','frequencia','plano','pagaria','justo','peso'].forEach(function(k){estado.e[k]=me[k];}); }
+  $('#modal-bg').classList.add('show');
+  document.body.style.overflow='hidden';
+  render();
+}
+function fechar(){
+  $('#modal-bg').classList.remove('show'); document.body.style.overflow='';
+  if(concluiu && !avaliou && !pediuFeedback && estado.fluxo!=='feedback'){ concluiu=false; pedirFeedback(); }
+}
+$('#fechar').addEventListener('click',fechar);
+$('#modal-bg').addEventListener('click',function(ev){ if(ev.target===$('#modal-bg')) fechar(); });
+document.addEventListener('keydown',function(ev){ if(ev.key==='Escape' && $('#modal-bg').classList.contains('show')) fechar(); });
+function ligarAbrir(root){ $$('[data-abrir]',root).forEach(function(b){ if(b._lig) return; b._lig=1; b.addEventListener('click',function(){abrir(b.dataset.abrir,{pag:b.dataset.pag});}); }); }
+ligarAbrir(document);
+
+function prog(n,total){ $('#prog').innerHTML = total? Array.apply(null,Array(total)).map(function(_,i){return '<i class="'+(i<=n?'on':'')+'"></i>';}).join('') : ''; }
+function opt(list,val,ph){ return '<option value="">'+(ph||'Selecione')+'</option>'+list.map(function(x){return '<option'+(x===val?' selected':'')+'>'+esc(x)+'</option>';}).join(''); }
+function pe(voltar, avancarTxt){ return '<div class="erro" id="erro"></div><div class="modal-pe">'+(voltar?'<button class="btn btn-ghost" id="voltar">← Voltar</button>':'<span></span>')+'<button class="btn btn-roxo" id="avancar">'+avancarTxt+'</button></div>'; }
+function erro(msg){ $('#erro').textContent=msg; }
+function val(id){ var el=$('#'+id); return el? el.value.trim():''; }
+
+/* ---------- Endereço com sugestões ---------- */
+var BAIRROS={
+  'Belo Horizonte':['Savassi','Lourdes','Funcionários','Centro','Santo Agostinho','Santo Antônio','São Pedro','Sion','Serra','Anchieta','Cruzeiro','Carmo','Mangabeiras','Belvedere','Santa Lúcia','Luxemburgo','Gutierrez','Barro Preto','Prado','Calafate','Grajaú','Nova Suíça','Buritis','Estoril','Havaí','Palmeiras','Cidade Jardim','Coração de Jesus','Santa Efigênia','Floresta','Santa Tereza','Sagrada Família','Horto','Cidade Nova','União','Silveira','Dona Clara','Liberdade','Ouro Preto','Pampulha','São Luiz','Bandeirantes','Itapoã','Santa Amélia','Jaraguá','Planalto','Castelo','Caiçara','Padre Eustáquio','Carlos Prates','Coração Eucarístico','Alípio de Melo','Gameleira','Venda Nova','Barreiro','Santa Mônica','Copacabana','Heliópolis','Lagoinha','Bonfim','Santa Inês','Vila Paris'],
+  'Contagem':['Centro','Eldorado','Novo Eldorado','Riacho','Inconfidentes','Água Branca','Industrial','Glória','Ressaca','Petrolândia'],
+  'Nova Lima':['Vila da Serra','Vale do Sereno','Jardim da Torre','Centro','Alphaville Lagoa dos Ingleses','Vale dos Cristais','Ouro Velho'],
+  'Betim':['Centro','Ingá','Angola','Brasiléia','Jardim da Cidade','Citrolândia'],
+  'Lagoa Santa':['Centro','Lundcéia','Joá'],
+  'Sabará':['Centro','General Carneiro'],
+  'Santa Luzia':['Centro','São Benedito'],
+  'Ribeirão das Neves':['Centro','Justinópolis'],
+  'Vespasiano':['Centro'],
+  'Ibirité':['Centro'],
+  'Brumadinho':['Centro'],
+  'Pedro Leopoldo':['Centro']
+};
+var LOCAIS=[];
+Object.keys(BAIRROS).forEach(function(c){ LOCAIS.push({b:'',c:c,txt:c}); BAIRROS[c].forEach(function(b){ LOCAIS.push({b:b,c:c,txt:b+', '+c}); }); });
+['São Paulo','Rio de Janeiro','Brasília','Ouro Preto','Juiz de Fora','Uberlândia'].forEach(function(c){ LOCAIS.push({b:'',c:c,txt:c}); });
+var POPULARES=['Savassi, Belo Horizonte','Lourdes, Belo Horizonte','Centro, Belo Horizonte','Pampulha, Belo Horizonte','Buritis, Belo Horizonte','Vila da Serra, Nova Lima','Eldorado, Contagem','Contagem'];
+function norm(s){ return String(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().trim(); }
+function sugestoes(q){
+  var n=norm(q);
+  if(!n) return POPULARES.map(function(t){ return LOCAIS.filter(function(l){return l.txt===t;})[0]; }).filter(Boolean);
+  var tokens=n.split(/[\s,.-]+/).filter(Boolean);
+  var todos=LOCAIS.filter(function(l){ var t=norm(l.txt); return tokens.every(function(k){ return t.indexOf(k)>=0; }); });
+  if(!todos.length){
+    var longos=tokens.filter(function(k){return k.length>=3;});
+    todos=LOCAIS.filter(function(l){ var t=norm(l.txt); return longos.some(function(k){ return t.indexOf(k)>=0; }); });
+  }
+  todos.sort(function(a,b){
+    var pa=norm(a.b||a.c).indexOf(tokens[0])===0?0:1, pb=norm(b.b||b.c).indexOf(tokens[0])===0?0:1;
+    if(pa!==pb) return pa-pb;
+    var ca=a.c==='Belo Horizonte'?0:1, cb=b.c==='Belo Horizonte'?0:1;
+    if(ca!==cb) return ca-cb;
+    return a.txt.localeCompare(b.txt,'pt-BR');
+  });
+  var res=todos.slice(0,7);
+  var exato=LOCAIS.some(function(l){return norm(l.txt)===n || (l.b && norm(l.b)===n) || norm(l.c)===n;});
+  if(q.trim().length>=3 && !exato) res.push({livre:true,txt:q.trim()});
+  return res;
+}
+var IC_PIN='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>';
+var IC_LAPIS='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>';
+function campoLocal(id,label,valor,ph,ajuda){
+  return '<div class="campo"><label for="'+id+'">'+label+'</label><div class="combo"><span class="combo-ic">'+IC_PIN+'</span>'+
+    '<input type="text" id="'+id+'" class="combo-in" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="'+id+'-lista" autocomplete="off" maxlength="120" value="'+esc(valor)+'" placeholder="'+esc(ph)+'">'+
+    '<ul class="combo-lista" id="'+id+'-lista" role="listbox" aria-label="Sugestões de endereço" hidden></ul></div>'+
+    (ajuda?'<span class="ajuda">'+ajuda+'</span>':'')+'</div>';
+}
+function ligarLocal(id){
+  var inp=$('#'+id), ul=$('#'+id+'-lista'); if(!inp||!ul) return;
+  var itens=[], ativo=-1;
+  function fecharLista(){ ul.hidden=true; inp.setAttribute('aria-expanded','false'); inp.removeAttribute('aria-activedescendant'); ativo=-1; }
+  function abrirLista(){
+    itens=sugestoes(inp.value);
+    if(!itens.length){ fecharLista(); return; }
+    ul.innerHTML=itens.map(function(it,i){
+      return '<li role="option" id="'+id+'-op'+i+'" data-i="'+i+'" aria-selected="false"'+(it.livre?' class="livre"':'')+'>'+
+        (it.livre? IC_LAPIS+'<span>Usar “'+esc(it.txt)+'”</span>' : IC_PIN+'<span>'+(it.b?'<b>'+esc(it.b)+'</b><span class="cid">, '+esc(it.c)+'</span>':'<b>'+esc(it.c)+'</b><span class="cid"> · cidade inteira</span>')+'</span>')+'</li>';
+    }).join('');
+    ul.hidden=false; inp.setAttribute('aria-expanded','true'); ativo=-1;
+  }
+  function marcar(i){
+    ativo=i;
+    $$('li',ul).forEach(function(li,k){ var on=k===i; li.classList.toggle('ativo',on); li.setAttribute('aria-selected',on?'true':'false'); if(on){ inp.setAttribute('aria-activedescendant',li.id); try{li.scrollIntoView({block:'nearest'});}catch(e){} } });
+  }
+  function escolher(i){ inp.value=itens[i].txt; fecharLista(); inp.dispatchEvent(new Event('change')); }
+  inp.addEventListener('input',abrirLista);
+  inp.addEventListener('focus',abrirLista);
+  inp.addEventListener('keydown',function(ev){
+    if(ul.hidden){ if(ev.key==='ArrowDown'){ ev.preventDefault(); abrirLista(); } return; }
+    if(ev.key==='ArrowDown'){ ev.preventDefault(); marcar(Math.min(itens.length-1,ativo+1)); }
+    else if(ev.key==='ArrowUp'){ ev.preventDefault(); marcar(Math.max(0,ativo-1)); }
+    else if(ev.key==='Enter'){ if(ativo>=0){ ev.preventDefault(); escolher(ativo); } else fecharLista(); }
+    else if(ev.key==='Escape'){ ev.stopPropagation(); fecharLista(); }
+    else if(ev.key==='Tab'){ fecharLista(); }
+  });
+  ul.addEventListener('mousedown',function(ev){ ev.preventDefault(); });
+  ul.addEventListener('click',function(ev){ var li=ev.target.closest('li'); if(li) escolher(Number(li.dataset.i)); });
+  inp.addEventListener('blur',function(){ setTimeout(fecharLista,120); });
+}
+
+/* ---------- Valor em reais ---------- */
+function fmtNum(v){ return Number(v||0).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function campoMoeda(id,valor,ph,rotulo){
+  return '<div class="moeda"><span aria-hidden="true">R$</span><input type="text" inputmode="numeric" id="'+id+'" value="'+(valor?fmtNum(valor):'')+'" placeholder="'+(ph||'0,00')+'"'+(rotulo?' aria-label="'+esc(rotulo)+'"':'')+'></div>';
+}
+function ligarMoeda(inp,cb){
+  if(!inp) return;
+  inp.addEventListener('input',function(){
+    var d=inp.value.replace(/\D/g,'').replace(/^0+/,'').slice(0,7);
+    var v=d? parseInt(d,10)/100 : 0;
+    inp.value = d? fmtNum(v) : '';
+    cb(v);
+  });
+}
+function dataRel(dias){ var d=new Date(); d.setHours(12,0,0,0); d.setDate(d.getDate()+dias); return d.toISOString().slice(0,10); }
+var DIAS_SEM=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'], MESES=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+function dataLonga(iso){ if(!iso) return 'Data a combinar'; var d=new Date(iso+'T12:00:00'); return DIAS_SEM[d.getDay()]+', '+d.getDate()+' de '+MESES[d.getMonth()]; }
+function hora(x){ return x? String(x).replace(/^0/,'').replace(':00','h').replace(':','h') : ''; }
+
+
+function render(){
+  var b=$('#modal-body');
+  if(!estado.fluxo){
+    prog(0,0);
+    b.innerHTML='<h2>Crie sua conta no Toppa</h2><p class="sub">Como você quer usar o app?</p>'+
+      '<div class="escolha"><button data-f="freela"><span class="ic-box" style="width:46px;height:46px"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/></svg></span><b>Sou freelancer</b><small>Quero criar meu perfil e ser contratado. Grátis.</small></button>'+
+      '<button data-f="empresa"><span class="ic-box" style="width:46px;height:46px;background:var(--roxo-noite)"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></span><b>Sou empresa</b><small>Quero publicar eventos e contratar freelancers.</small></button></div>'+
+      '<p style="font-size:13px;color:var(--cinza);margin:18px 0 0">Versão de teste: sem documentos reais e sem cobrança.</p>';
+    $$('[data-f]',b).forEach(function(x){x.addEventListener('click',function(){estado.fluxo=x.dataset.f;estado.passo=0;render();});});
+    return;
+  }
+  if(estado.fluxo==='freela') renderFreela(b);
+  else if(estado.fluxo==='empresa') renderEmpresa(b);
+  else if(estado.fluxo==='reserva') renderReserva(b);
+  else renderFeedback(b);
+  var first=$('input,select,textarea,button.btn-roxo',b); if(first) try{first.focus({preventScroll:true});}catch(e){}
+}
+
+/* ---- Freelancer ---- */
+function renderFreela(b){
+  var f=estado.f, n=estado.passo; prog(n,5);
+  if(n===0){
+    b.innerHTML='<h2>Seus dados básicos</h2><p class="sub">Pode usar um apelido. Nada aqui é verificado na versão de teste.</p>'+
+    '<div class="campo"><label for="f-nome">Nome ou apelido *</label><input type="text" id="f-nome" maxlength="40" value="'+esc(f.nome)+'" placeholder="Ex.: Ana Lima"></div>'+
+    '<div class="linha"><div class="campo"><label for="f-idade">Idade</label><input type="number" id="f-idade" min="16" max="90" inputmode="numeric" value="'+esc(f.idade)+'"></div>'+
+    '<div class="campo"><label for="f-area">Área de atuação *</label><select id="f-area">'+opt(AREAS,f.area)+'</select></div></div>'+
+    campoLocal('f-local','Onde você atende? *',f.cidade,'Digite seu bairro ou cidade','Digite e escolha uma opção, como “Savassi, Belo Horizonte”. Também pode escrever o endereço.')+pe(true,'Continuar');
+    ligarLocal('f-local');
+    $('#voltar').addEventListener('click',function(){estado.fluxo=null;render();});
+    $('#avancar').addEventListener('click',function(){
+      f.nome=val('f-nome'); f.idade=val('f-idade'); f.cidade=val('f-local'); var a=val('f-area');
+      if(a!==f.area) f.habilidades=[]; f.area=a;
+      if(!f.nome) return erro('Preencha seu nome ou apelido.'); if(!f.area) return erro('Escolha sua área de atuação.'); if(!f.cidade) return erro('Diga em que bairro ou cidade você atende.');
+      estado.passo=1; render();
+    });
+  } else if(n===1){
+    var hs=HAB[f.area]||HAB['Outra'];
+    f.fotos=f.fotos||[];
+    b.innerHTML='<h2>Monte seu perfil</h2><p class="sub">É isso que as empresas vão ver quando deslizarem até você.</p>'+
+    campoFoto('f-foto','Sua foto de perfil <span style="font-weight:500;color:var(--suave)">(recomendado)</span>',f.foto,true,'Uma foto do rosto, com boa luz. Perfis com foto recebem mais topadas.')+
+    '<div class="campo"><label for="f-titulo">Título profissional *</label><input type="text" id="f-titulo" maxlength="50" value="'+esc(f.titulo)+'" placeholder="Ex.: Fotógrafa de casamentos"></div>'+
+    '<div class="campo"><label for="f-anos">Anos de experiência</label><select id="f-anos">'+opt(['Menos de 1','1','2','3','4','5','6 a 10','Mais de 10'],f.anos)+'</select></div>'+
+    '<div class="campo"><span style="font-size:14px;font-weight:600" id="hab-lbl">Habilidades (até 5)</span><div class="chips" role="group" aria-labelledby="hab-lbl">'+hs.map(function(h){return '<button type="button" aria-pressed="'+(f.habilidades.indexOf(h)>=0)+'" data-h="'+esc(h)+'">'+esc(h)+'</button>';}).join('')+'</div></div>'+
+    '<div class="campo"><label for="f-sobre">Sobre você</label><textarea id="f-sobre" maxlength="300" placeholder="Conte em poucas linhas o que você faz e como trabalha.">'+esc(f.sobre)+'</textarea><span class="ajuda">Até 300 caracteres.</span></div>'+
+    campoPortfolio('f-port',f.fotos)+
+    '<div class="campo"><span style="font-size:14px;font-weight:600" id="disp-lbl">Disponibilidade</span><div class="chips" role="group" aria-labelledby="disp-lbl">'+['Dias úteis','Fins de semana','Noites','Viagens'].map(function(d){return '<button type="button" aria-pressed="'+((f.disp||[]).indexOf(d)>=0)+'" data-d="'+d+'">'+d+'</button>';}).join('')+'</div></div>'+pe(true,'Continuar');
+    $$('[data-h]',b).forEach(function(x){x.addEventListener('click',function(){var h=x.dataset.h,i=f.habilidades.indexOf(h);if(i>=0)f.habilidades.splice(i,1);else if(f.habilidades.length<5)f.habilidades.push(h);else return erro('Escolha no máximo 5.');x.setAttribute('aria-pressed',f.habilidades.indexOf(h)>=0);erro('');});});
+    $$('[data-d]',b).forEach(function(x){x.addEventListener('click',function(){f.disp=f.disp||[];var d=x.dataset.d,i=f.disp.indexOf(d);if(i>=0)f.disp.splice(i,1);else f.disp.push(d);x.setAttribute('aria-pressed',f.disp.indexOf(d)>=0);});});
+    ligarFoto('f-foto',{label:'Sua foto de perfil <span style="font-weight:500;color:var(--suave)">(recomendado)</span>',redondo:true,quadrado:true,max:260,q:0.75,ajuda:'Uma foto do rosto, com boa luz. Perfis com foto recebem mais topadas.',get:function(){return f.foto;},set:function(d){f.foto=d;}});
+    ligarPortfolio('f-port',f.fotos);
+    $('#voltar').addEventListener('click',function(){guardar1();estado.passo=0;render();});
+    function guardar1(){f.titulo=val('f-titulo');f.anos=val('f-anos');f.sobre=val('f-sobre');}
+    $('#avancar').addEventListener('click',function(){guardar1();if(!f.titulo)return erro('Escreva seu título profissional.');if(!f.habilidades.length)return erro('Escolha pelo menos uma habilidade.');estado.passo=2;render();});
+  } else if(n===2){
+    f.verif=f.verif||{doc:false,selfie:false};
+    b.innerHTML='<h2>Verificação de identidade</h2><p class="sub">No app final, você envia um documento e tira uma selfie. Aqui é só uma simulação.</p>'+
+    '<div class="aviso">'+CHECK+'<span><b>Versão de teste:</b> nenhum arquivo é enviado. Clique em "Simular" para ver como funciona.</span></div>'+
+    '<div class="verif">'+
+      vItem('doc','Documento oficial','RG, CNH ou CNH digital',f.verif.doc)+
+      vItem('selfie','Selfie com prova de vida','Confirma que você é a pessoa do documento',f.verif.selfie)+
+    '</div>'+pe(true,'Continuar');
+    $$('[data-v]',b).forEach(function(x){x.addEventListener('click',function(){var k=x.dataset.v;x.disabled=true;x.textContent='Analisando…';setTimeout(function(){f.verif[k]=true;render();},900);});});
+    $('#voltar').addEventListener('click',function(){estado.passo=1;render();});
+    $('#avancar').addEventListener('click',function(){if(!f.verif.doc||!f.verif.selfie)return erro('Simule as duas etapas para continuar.');estado.passo=3;render();});
+  } else if(n===3){
+    b.innerHTML='<h2>Regras do Toppa</h2><p class="sub">Leia antes de publicar seu perfil. Elas valem para todos os freelancers.</p>'+
+    '<div class="regras">'+
+      '<div class="regra"><span class="rn">1</span><div><b>Avaliação por turno</b><p>Ao fim de cada turno, o contratante dá de 1 a 5 estrelas em pontualidade, postura e qualidade do trabalho. A média dos turnos forma a sua nota no perfil.</p></div></div>'+
+      '<div class="regra"><span class="rn">2</span><div><b>Penalidade por falta (no-show)</b><p>Faltar sem avisar com pelo menos 24h de antecedência gera penalidade: 1ª falta, advertência e nota 1 no turno; 2ª falta em 90 dias, perfil suspenso por 30 dias; 3ª falta, conta encerrada.</p></div></div>'+
+      '<div class="regra"><span class="rn">3</span><div><b>Receba em 24h com taxa de 5%</b><p>Você recebe pelo app, direto do contratante. No prazo padrão não há taxa. Se quiser o dinheiro em até 24h depois do turno, é cobrada uma taxa de 5% sobre o valor.</p></div></div>'+
+    '</div>'+
+    '<label class="aceite"><input type="checkbox" id="f-aceite"'+(f.aceite?' checked':'')+'> <span>Li e aceito as regras do Toppa</span></label>'+pe(true,'Continuar');
+    $('#voltar').addEventListener('click',function(){estado.passo=2;render();});
+    $('#f-aceite').addEventListener('change',function(ev){f.aceite=ev.target.checked; if(f.aceite) erro('');});
+    $('#avancar').addEventListener('click',function(){ if(!f.aceite) return erro('Para continuar, marque "Li e aceito as regras do Toppa".'); estado.passo=4; render(); });
+  } else if(n===4){
+    var p=deParaPerfil(f,true);
+    b.innerHTML='<h2>Seu perfil está pronto</h2><p class="sub">Confira como as empresas vão ver você.</p>'+
+    '<div class="cartao" style="max-width:100%;box-shadow:none"><div class="foto" style="height:180px;font-size:64px;background:var(--lilas-2)">'+fotoOuIni(p)+'<span class="pill" style="left:14px;background:#fff;color:var(--roxo-esc)">✓ Verificado (teste)</span></div><div class="corpo"><div><b class="disp" style="font-size:24px">'+esc(f.nome)+(f.idade?', '+esc(f.idade):'')+'</b><div style="color:var(--texto);font-weight:500">'+esc(f.titulo)+'</div><div style="font-size:14px;color:var(--suave)">'+esc(f.cidade)+' · '+esc(f.area)+'</div></div><div class="nota"><div><b class="disp" style="font-size:18px">Novo no Toppa</b><div style="font-size:13px;color:var(--suave)">Suas estrelas aparecem após o 1º trabalho</div></div><div style="text-align:right"><b class="disp" style="font-size:24px;color:var(--roxo)">0</b><div style="font-size:13px;color:var(--suave)">trabalhos</div></div></div><div style="display:flex;flex-wrap:wrap;gap:8px">'+f.habilidades.map(function(t){return '<span class="tag">'+esc(t)+'</span>';}).join('')+'</div>'+(f.sobre?'<p style="margin:0;color:var(--texto);font-size:14.5px;line-height:1.6">'+esc(f.sobre)+'</p>':'')+'</div></div>'+pe(true,'Publicar meu perfil');
+    $('#voltar').addEventListener('click',function(){estado.passo=3;render();});
+    $('#avancar').addEventListener('click',function(){
+      var bt=$('#avancar'); bt.disabled=true; bt.textContent='Publicando…';
+      meuCadastro.freela={foto:f.foto||'',fotos:(f.fotos||[]).slice(0,3),nome:f.nome,idade:f.idade,cidade:f.cidade,area:f.area,titulo:f.titulo,anos:f.anos,habilidades:f.habilidades.slice(),sobre:f.sobre,disp:(f.disp||[]).slice(),verificado_teste:true,aceitou_regras:true,quando:new Date().toISOString()};
+      var hist=meuCadastro.perfisCriados && meuCadastro.perfisCriados.length ? meuCadastro.perfisCriados : [];
+      hist.push(perfilPublico(meuCadastro.freela)); meuCadastro.perfisCriados=hist.slice(-20);
+      gravarCadastro().then(function(ok){ estado.passo=5; estado.salvo=ok; concluiu=true; render(); idx=0; renderDeck(); });
+    });
+  } else {
+    prog(4,5);
+    var nVagas=todosEventos().filter(function(v){return v.area===meuCadastro.freela.area;}).length;
+    b.innerHTML='<div style="text-align:center"><div class="ok-ic">'+CHECK.replace('16','34').replace('16','34')+'</div><h2>Topou! Seu perfil está no ar.</h2><p class="sub">'+(nVagas?'Já tem <b>'+nVagas+' vaga(s)</b> de '+esc(meuCadastro.freela.area)+' esperando por você.':'Já tem empresas com vagas abertas esperando por você.')+'</p></div>'+
+    '<div class="resumo"><b>'+esc(meuCadastro.freela.nome)+'</b> · '+esc(meuCadastro.freela.titulo)+'<br>'+esc(meuCadastro.freela.cidade)+' · '+meuCadastro.freela.habilidades.map(esc).join(', ')+'</div>'+
+    '<div class="modal-pe"><button class="btn btn-borda" id="ir-empresa">Testar o lado empresa</button><button class="btn btn-roxo" id="ver-perfil">Ver vagas disponíveis</button></div>'+btnAvaliar();
+    ligarAvaliar();
+    $('#btn-app').hidden=false;
+    $('#ver-perfil').addEventListener('click',function(){ $('#modal-bg').classList.remove('show'); abrirApp('vagas','freela'); });
+    $('#ir-empresa').addEventListener('click',function(){estado.fluxo='empresa';estado.passo=0;render();});
+  }
+}
+function vItem(k,t,s,ok){
+  return '<div class="vitem"><div><b style="font-size:15px">'+t+'</b><div style="font-size:13.5px;color:var(--suave)">'+s+'</div></div>'+(ok?'<span class="st">'+CHECK+'Aprovado (teste)</span>':'<button class="btn btn-borda" data-v="'+k+'" style="min-height:42px">Simular</button>')+'</div>';
+}
+
+/* ---- Empresa ---- */
+function renderEmpresa(b){
+  var e=estado.e, n=estado.passo; prog(estado.soEvento?0:n, estado.soEvento?0:4);
+  if(n===0){
+    b.innerHTML='<h2>Sobre sua empresa</h2><p class="sub">Pode ser um nome fictício. É só um teste.</p>'+
+    '<div class="campo"><label for="e-nome">Nome da empresa *</label><input type="text" id="e-nome" maxlength="50" value="'+esc(e.nome)+'" placeholder="Ex.: Studio Aurora Eventos"></div>'+
+    campoFoto('e-logo','Logo da empresa <span style="font-weight:500;color:var(--suave)">(opcional)</span>',e.logo,false,'Aparece nas suas vagas para os freelancers.')+
+    '<div class="linha"><div class="campo"><label for="e-seg">Segmento *</label><select id="e-seg">'+opt(SEGMENTOS,e.segmento)+'</select></div>'+
+    '<div class="campo"><label for="e-tam">Tamanho da equipe</label><select id="e-tam">'+opt(TAMANHOS,e.tamanho)+'</select></div></div>'+
+    campoLocal('e-local','Endereço da empresa *',e.cidade,'Digite o endereço ou bairro','Ex.: Lourdes, Belo Horizonte')+
+    '<div class="campo"><label for="e-freq">Com que frequência você contrata freelancers?</label><select id="e-freq">'+opt(['Toda semana','Algumas vezes por mês','Uma vez por mês','Poucas vezes por ano','Nunca contratei'],e.frequencia)+'</select></div>'+pe(true,'Continuar');
+    ligarLocal('e-local');
+    ligarFoto('e-logo',{label:'Logo da empresa <span style="font-weight:500;color:var(--suave)">(opcional)</span>',quadrado:true,max:220,q:0.8,ajuda:'Aparece nas suas vagas para os freelancers.',get:function(){return e.logo;},set:function(d){e.logo=d;}});
+    $('#voltar').addEventListener('click',function(){estado.fluxo=null;render();});
+    $('#avancar').addEventListener('click',function(){e.nome=val('e-nome');e.segmento=val('e-seg');e.cidade=val('e-local');e.tamanho=val('e-tam');e.frequencia=val('e-freq');if(!e.nome)return erro('Preencha o nome da empresa.');if(!e.segmento)return erro('Escolha o segmento.');if(!e.cidade)return erro('Preencha o endereço da empresa.');estado.passo=1;render();});
+  } else if(n===1){
+    var amanha=dataRel(1), hs=[]; for(var h=6;h<=23;h++){hs.push((h<10?'0':'')+h+':00');} hs.push('00:00','01:00','02:00','03:00');
+    b.innerHTML='<h2>'+(estado.soEvento?'Publicar nova vaga':'Publique seu primeiro evento')+'</h2><p class="sub">É isso que os freelancers vão ver para topar a vaga.</p>'+
+    '<div class="campo"><label for="e-ev">Nome do evento *</label><input type="text" id="e-ev" maxlength="60" value="'+esc(e.evento)+'" placeholder="Ex.: Casamento Ana e Pedro"></div>'+
+    '<div class="linha"><div class="campo"><label for="e-area">Função procurada *</label><select id="e-area">'+opt(Object.keys(AREA_DA_FUNCAO),e.areaBusca)+'</select></div>'+
+    '<div class="campo"><label for="e-vagas">Quantas pessoas</label><select id="e-vagas">'+[1,2,3,4,5,6,8,10,15,20].map(function(n){return '<option'+(String(n)===String(e.vagas)?' selected':'')+'>'+n+'</option>';}).join('')+'</select></div></div>'+
+    '<div class="campo"><label for="e-data">Data do evento *</label><input type="date" id="e-data" min="'+amanha+'" value="'+esc(e.data)+'"></div>'+
+    '<div class="linha"><div class="campo"><label for="e-ini">Início do turno</label><select id="e-ini">'+hs.map(function(x){return '<option'+(x===e.inicio?' selected':'')+'>'+x+'</option>';}).join('')+'</select></div>'+
+    '<div class="campo"><label for="e-fim">Fim do turno</label><select id="e-fim">'+hs.map(function(x){return '<option'+(x===e.fim?' selected':'')+'>'+x+'</option>';}).join('')+'</select></div></div>'+
+    campoLocal('e-evlocal','Local do evento *',e.evlocal,'Digite o endereço ou bairro','Ex.: Vila da Serra, Nova Lima')+
+    '<div class="campo"><label for="e-cache">Valor por pessoa, por turno *</label>'+campoMoeda('e-cache',e.cache,'0,00')+'<span class="ajuda">O freelancer vê esse valor na vaga. Ele pode receber em 24h com taxa de 5%.</span></div>'+
+    campoFoto('e-fotoev','Foto do evento ou do local <span style="font-weight:500;color:var(--suave)">(opcional)</span>',e.fotoEv,false,'Ajuda o freelancer a entender o clima do evento.')+
+    '<div class="campo"><label for="e-func">Como vai funcionar</label><textarea id="e-func" maxlength="300" placeholder="Ex.: chegar 30 min antes, traje preto, jantar incluso.">'+esc(e.funciona)+'</textarea></div>'+pe(true,'Continuar');
+    ligarLocal('e-evlocal');
+    ligarMoeda($('#e-cache'),function(v){e.cache=v;});
+    ligarFoto('e-fotoev',{label:'Foto do evento ou do local <span style="font-weight:500;color:var(--suave)">(opcional)</span>',max:520,q:0.68,ajuda:'Ajuda o freelancer a entender o clima do evento.',get:function(){return e.fotoEv;},set:function(d){e.fotoEv=d;}});
+    $('#voltar').addEventListener('click',function(){guardar(); if(estado.soEvento){ $('#modal-bg').classList.remove('show'); document.body.style.overflow=''; abrirApp('eventos','empresa'); return; } estado.passo=0;render();});
+    function guardar(){e.evento=val('e-ev');e.areaBusca=val('e-area');e.vagas=val('e-vagas');e.data=val('e-data');e.inicio=val('e-ini');e.fim=val('e-fim');e.evlocal=val('e-evlocal');e.funciona=val('e-func');}
+    $('#avancar').addEventListener('click',function(){guardar();if(!e.evento)return erro('Dê um nome ao evento.');if(!e.areaBusca)return erro('Escolha a função procurada.');if(!e.data)return erro('Escolha a data do evento.');if(e.data<amanha)return erro('Escolha uma data a partir de amanhã.');if(!e.evlocal)return erro('Preencha o local do evento.');if(!e.cache)return erro('Informe o valor por pessoa.');
+      if(estado.soEvento){ var evs=meusEventos().slice(); evs.push(eventoDosDados(e)); meuCadastro.eventos=evs.slice(-20); app.evSel=meuCadastro.eventos[meuCadastro.eventos.length-1].id; gravarCadastro(); $('#modal-bg').classList.remove('show'); document.body.style.overflow=''; abrirApp('eventos','empresa'); toast('Vaga publicada! Os freelancers já podem topar.'); return; }
+      estado.passo=2;render();});
+  } else if(n===2){
+    e.justo = e.justo==null? 35 : e.justo;
+    b.innerHTML='<h2>Escolha seu plano</h2><p class="sub">Simulação: nada é cobrado. Queremos saber qual opção você escolheria de verdade.</p>'+
+    '<div class="planos-m" id="pm">'+PLANOS.map(function(p){return htmlPlano(p,p.id===e.plano,true);}).join('')+'</div>'+
+    '<div class="campo" style="margin-top:22px"><span style="font-size:14px;font-weight:600" id="q1">Você pagaria pelo Toppa para contratar freelancers?</span><div class="opcoes" role="group" aria-labelledby="q1">'+['Sim, com certeza','Talvez, dependendo do preço','Só se tivesse um período grátis','Não pagaria'].map(function(o){return '<button type="button" data-q="pagaria" aria-pressed="'+(e.pagaria===o)+'">'+o+'</button>';}).join('')+'</div></div>'+
+    '<div class="campo"><label for="e-justo">Quanto você acha justo pagar por mês? <b id="justo-v" style="color:var(--roxo)">'+brl(Number(e.justo))+'</b></label><input type="range" id="e-justo" min="0" max="100" step="5" value="'+e.justo+'"></div>'+
+    '<div class="campo"><span style="font-size:14px;font-weight:600" id="q2">O que mais pesa na sua decisão?</span><div class="opcoes" role="group" aria-labelledby="q2">'+['Preço','Qualidade dos profissionais','Segurança dos perfis verificados','Rapidez para contratar'].map(function(o){return '<button type="button" data-q="peso" aria-pressed="'+(e.peso===o)+'">'+o+'</button>';}).join('')+'</div></div>'+pe(true,'Ir para o pagamento simulado');
+    $$('#pm [data-plano]').forEach(function(x){x.addEventListener('click',function(){e.plano=x.dataset.plano;$$('#pm [data-plano]').forEach(function(y){var on=y.dataset.plano===e.plano;y.classList.toggle('on',on);y.setAttribute('aria-pressed',on);});});});
+    $$('[data-q]',b).forEach(function(x){x.addEventListener('click',function(){e[x.dataset.q]=x.textContent;$$('[data-q="'+x.dataset.q+'"]',b).forEach(function(y){y.setAttribute('aria-pressed',y===x);});});});
+    $('#e-justo').addEventListener('input',function(ev){e.justo=Number(ev.target.value);$('#justo-v').textContent=brl(e.justo);});
+    $('#voltar').addEventListener('click',function(){estado.passo=1;render();});
+    $('#avancar').addEventListener('click',function(){if(!e.pagaria)return erro('Responda se você pagaria pelo Toppa.');if(!e.peso)return erro('Escolha o que mais pesa na sua decisão.');estado.passo=3;render();});
+  } else if(n===3){
+    var p=PLANOS.filter(function(x){return x.id===e.plano;})[0];
+    b.innerHTML='<h2>Pagamento simulado</h2><p class="sub">Confira o resumo. Nenhum dado de cartão é pedido e nada é cobrado.</p>'+
+    '<div class="caixa" style="background:var(--nevoa);border:none"><div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap"><div><b class="disp" style="font-size:20px">Toppa Contratante · '+p.nome+'</b><div style="color:var(--suave);font-size:14px;margin-top:4px">'+esc(e.nome)+'</div></div>'+(p.desc?'<span class="desc">'+Math.round(p.desc*100)+'% off</span>':'')+'</div>'+
+    '<div style="margin-top:16px;display:flex;flex-direction:column;gap:8px;font-size:15px">'+
+      '<div style="display:flex;justify-content:space-between"><span>Valor por mês</span><b>'+brl(porMes(p))+'</b></div>'+
+      '<div style="display:flex;justify-content:space-between"><span>Cobrança</span><b>'+(p.meses===1?'Mensal':'A cada '+p.meses+' meses')+'</b></div>'+
+      (p.desc?'<div style="display:flex;justify-content:space-between;color:var(--roxo-esc)"><span>Você economiza</span><b>'+brl(economia(p))+'</b></div>':'')+
+      '<div style="display:flex;justify-content:space-between;border-top:1px solid var(--borda-2);padding-top:10px;margin-top:4px;font-size:17px"><span>Total do período</span><b>'+brl(total(p))+'</b></div>'+
+    '</div></div>'+
+    '<div class="aviso" style="margin-top:16px">'+CHECK+'<span>Versão de teste. Ao confirmar, registramos só a sua escolha de plano para nossa pesquisa.</span></div>'+pe(true,'Confirmar (simulação)');
+    $('#voltar').addEventListener('click',function(){estado.passo=2;render();});
+    $('#avancar').addEventListener('click',function(){
+      var bt=$('#avancar'); bt.disabled=true; bt.textContent='Processando…';
+      meuCadastro.empresa={logo:e.logo||'',nome:e.nome,segmento:e.segmento,cidade:e.cidade,tamanho:e.tamanho,frequencia:e.frequencia,evento:e.evento,areaBusca:e.areaBusca,vagas:e.vagas,data:e.data,inicio:e.inicio,fim:e.fim,evlocal:e.evlocal,cache:e.cache,funciona:e.funciona||'',plano:e.plano,pagaria:e.pagaria,justo:e.justo,peso:e.peso,quando:new Date().toISOString()};
+      var evs=meuCadastro.eventos||[]; evs.push(eventoDosDados(e)); meuCadastro.eventos=evs.slice(-20);
+      setTimeout(function(){ gravarCadastro().then(function(ok){estado.passo=4;estado.salvo=ok;concluiu=true;render();}); },700);
+    });
+  } else {
+    prog(3,4);
+    var pl=PLANOS.filter(function(x){return x.id===e.plano;})[0];
+    b.innerHTML='<div style="text-align:center"><div class="ok-ic">'+CHECK.replace('16','34').replace('16','34')+'</div><h2>Tudo certo! Sua empresa topou.</h2><p class="sub">Seu evento "'+esc(e.evento)+'" foi publicado na versão de teste. Obrigado por responder à simulação de plano.</p></div>'+
+    '<div class="resumo"><b>'+esc(e.nome)+'</b> · plano '+pl.nome+' ('+brl(porMes(pl))+'/mês)<br>Você pagaria: '+esc(e.pagaria)+' · Preço justo: '+brl(Number(e.justo))+'/mês</div>'+
+    '<div class="modal-pe"><button class="btn btn-borda" id="ir-freela">Testar o lado freelancer</button><button class="btn btn-roxo" id="ver-talentos">Abrir o app da empresa</button></div>'+btnAvaliar();
+    ligarAvaliar();
+    $('#btn-app-emp').hidden=false;
+    $('#ver-talentos').addEventListener('click',function(){ $('#modal-bg').classList.remove('show'); abrirApp('talentos','empresa'); });
+    $('#ir-freela').addEventListener('click',function(){estado.fluxo='freela';estado.passo=0;estado.f={habilidades:[]};render();});
+  }
+}
+
+function btnAvaliar(){ return avaliou? '' : '<button class="btn btn-ghost" id="avaliar" style="width:100%;margin-top:10px">Avaliar o protótipo (1 minuto)</button>'; }
+function ligarAvaliar(){ var a=$('#avaliar'); if(a) a.addEventListener('click',function(){ estado.fluxo='feedback'; estado.passo=0; estado.fb={gostou:[]}; render(); }); }
+function salvarDoc(path, corpo){
+  if(!db || !uid) return Promise.resolve(false);
+  return db.doc(path+'/'+uid).set(corpo).then(function(){return true;}).catch(function(){return false;});
+}
+
+/* ---- Reserva de equipe ---- */
+var TIPOS_EVENTO=['Casamento','Evento corporativo','Aniversário ou festa','Show ou festival','Feira ou congresso','Outro'];
+var FUNCOES=[['Garçom','180'],['Bartender','300'],['Recepcionista','200'],['Fotógrafo(a)','600'],['Segurança','220'],['DJ','800'],['Auxiliar de limpeza','160'],['Cerimonialista','700']];
+function totalReserva(r){ return r.itens.reduce(function(a,it){ return a+(it.qtd||0)*(it.valor||0); },0); }
+function qtdReserva(r){ return r.itens.reduce(function(a,it){ return a+(it.qtd||0); },0); }
+var IC_LIXO='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></svg>';
+function htmlItem(it,i){
+  var on=it.qtd>0;
+  var topo = it.custom
+    ? '<div style="flex:1;min-width:0"><label for="it-n'+i+'" style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;color:var(--texto)">Nome do serviço *</label><input type="text" class="item-nome" id="it-n'+i+'" maxlength="40" value="'+esc(it.nome)+'" placeholder="Ex.: Maquiador(a), Manobrista"></div><button type="button" class="rem" data-rem="'+i+'" aria-label="Remover serviço personalizado">'+IC_LIXO+'</button>'
+    : '<div><b>'+esc(it.nome)+'</b><small>Referência no Toppa: R$ '+it.ref+' por turno</small></div><span class="item-sub" id="it-s'+i+'">'+(on&&it.valor?brl(it.qtd*it.valor):'')+'</span>';
+  return '<div class="item'+(on?' on':'')+'" id="it-'+i+'"><div class="item-top">'+topo+'</div>'+
+    '<div class="item-campos"><div><label for="it-v'+i+'">Valor por pessoa</label>'+campoMoeda('it-v'+i,it.valor,'0,00','Valor por pessoa para '+(it.nome||'serviço personalizado'))+'</div>'+
+    '<div><span class="lbl" id="it-ql'+i+'">Quantidade</span><div class="stepper" role="group" aria-labelledby="it-ql'+i+'"><button type="button" data-menos="'+i+'" aria-label="Menos uma pessoa">−</button><b id="it-q'+i+'" aria-live="polite">'+it.qtd+'</b><button type="button" data-mais="'+i+'" aria-label="Mais uma pessoa">+</button></div></div></div>'+
+    (it.custom?'<div class="item-sub" id="it-s'+i+'" style="text-align:right">'+(on&&it.valor?brl(it.qtd*it.valor):'')+'</div>':'')+
+  '</div>';
+}
+function brl0(v){ return 'R$ '+Math.round(v).toLocaleString('pt-BR'); }
+function dataBR(iso){ if(!iso) return ''; var p=iso.split('-'); return p[2]+'/'+p[1]+'/'+p[0]; }
+function renderReserva(b){
+  var r=estado.r, n=estado.passo; prog(Math.min(n,3),4);
+  if(n===0){
+    b.innerHTML='<h2>Qual é o evento?</h2><p class="sub">Passo 1 de 4 · Escolha o tipo de evento.</p>'+
+    '<div class="eventos" role="group" aria-label="Tipo de evento">'+TIPOS_EVENTO.map(function(t){return '<button type="button" data-ev="'+esc(t)+'" aria-pressed="'+(r.evento===t)+'">'+esc(t)+'</button>';}).join('')+'</div>'+
+    '<div class="linha" style="margin-top:18px"><div class="campo"><label for="r-nome">Nome do evento</label><input type="text" id="r-nome" maxlength="60" value="'+esc(r.nome)+'" placeholder="Ex.: Casamento Ana e Pedro"></div>'+
+    '<div class="campo"><label for="r-conv">Convidados</label><select id="r-conv">'+opt(['Até 50','51 a 150','151 a 300','Mais de 300'],r.convidados)+'</select></div></div>'+pe(false,'Continuar');
+    $$('[data-ev]',b).forEach(function(x){x.addEventListener('click',function(){r.evento=x.dataset.ev;$$('[data-ev]',b).forEach(function(y){y.setAttribute('aria-pressed',y===x);});erro('');});});
+    $('#avancar').addEventListener('click',function(){r.nome=val('r-nome');r.convidados=val('r-conv');if(!r.evento)return erro('Escolha o tipo de evento.');estado.passo=1;render();});
+  } else if(n===1){
+    var padrao=[], extra=[];
+    r.itens.forEach(function(it,i){ (it.custom?extra:padrao).push(htmlItem(it,i)); });
+    b.innerHTML='<h2>Quem você precisa?</h2><p class="sub">Passo 2 de 4 · Para cada função, diga quanto quer pagar por pessoa e quantas pessoas precisa.</p>'+
+    '<div class="itens">'+padrao.join('')+'</div>'+
+    '<div class="grupo-tit">Não encontrou o serviço?</div>'+
+    '<div class="itens">'+extra.join('')+'<button type="button" class="add-custom" id="add-custom"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Adicionar serviço personalizado</button></div>'+
+    '<div class="pe-fixo"><div class="tot"><span><b id="r-qtd">'+qtdReserva(r)+'</b> pessoa(s)</span><span>Total: <b class="disp" id="r-total">'+brl(totalReserva(r))+'</b></span></div>'+pe(true,'Continuar')+'</div>';
+    function atualizar(i){
+      var it=r.itens[i], card=$('#it-'+i);
+      if(card){ card.classList.toggle('on',it.qtd>0); $('#it-q'+i).textContent=it.qtd; var sb=$('#it-s'+i); if(sb) sb.textContent=(it.qtd&&it.valor)?brl(it.qtd*it.valor):''; }
+      $('#r-qtd').textContent=qtdReserva(r); $('#r-total').textContent=brl(totalReserva(r)); erro('');
+    }
+    r.itens.forEach(function(it,i){
+      ligarMoeda($('#it-v'+i),function(v){ it.valor=v; if(v>0&&!it.qtd){ it.qtd=1; } atualizar(i); });
+      var nm=$('#it-n'+i); if(nm) nm.addEventListener('input',function(){ it.nome=nm.value; });
+    });
+    $$('[data-mais]',b).forEach(function(x){x.addEventListener('click',function(){var i=Number(x.dataset.mais);r.itens[i].qtd=Math.min(50,(r.itens[i].qtd||0)+1);atualizar(i);});});
+    $$('[data-menos]',b).forEach(function(x){x.addEventListener('click',function(){var i=Number(x.dataset.menos);r.itens[i].qtd=Math.max(0,(r.itens[i].qtd||0)-1);atualizar(i);});});
+    $$('[data-rem]',b).forEach(function(x){x.addEventListener('click',function(){r.itens.splice(Number(x.dataset.rem),1);render();});});
+    $('#add-custom').addEventListener('click',function(){ r.itens.push({nome:'',ref:0,valor:0,qtd:1,custom:true}); render(); var k=r.itens.length-1; var nm=$('#it-n'+k); if(nm){ nm.focus(); try{nm.scrollIntoView({block:'center'});}catch(e){} } });
+    $('#voltar').addEventListener('click',function(){estado.passo=0;render();});
+    $('#avancar').addEventListener('click',function(){
+      if(!qtdReserva(r)) return erro('Adicione pelo menos uma pessoa.');
+      for(var i=0;i<r.itens.length;i++){ var it=r.itens[i]; if(!it.qtd) continue;
+        if(it.custom && !String(it.nome).trim()){ var n1=$('#it-n'+i); if(n1) n1.focus(); return erro('Dê um nome ao serviço personalizado.'); }
+        if(!it.valor){ var v1=$('#it-v'+i); if(v1) v1.focus(); return erro('Informe o valor por pessoa para '+(String(it.nome).trim()||'o serviço personalizado')+'.'); }
+      }
+      estado.passo=2; render();
+    });
+  } else if(n===2){
+    var hoje=new Date(); hoje.setDate(hoje.getDate()+1); var min=hoje.toISOString().slice(0,10);
+    var horas=[]; for(var h=6;h<=23;h++){horas.push((h<10?'0':'')+h+':00');} horas.push('00:00','01:00','02:00','03:00');
+    b.innerHTML='<h2>Data e horário</h2><p class="sub">Passo 3 de 4 · Quando a equipe precisa estar lá?</p>'+
+    '<div class="campo"><label for="r-data">Data do evento *</label><input type="date" id="r-data" min="'+min+'" value="'+esc(r.data)+'"></div>'+
+    '<div class="linha"><div class="campo"><label for="r-ini">Início do turno</label><select id="r-ini">'+horas.map(function(x){return '<option'+(x===r.inicio?' selected':'')+'>'+x+'</option>';}).join('')+'</select></div>'+
+    '<div class="campo"><label for="r-fim">Fim do turno</label><select id="r-fim">'+horas.map(function(x){return '<option'+(x===r.fim?' selected':'')+'>'+x+'</option>';}).join('')+'</select></div></div>'+
+    campoLocal('r-local','Local do evento *',r.cidade,'Digite o endereço ou bairro','Ex.: Savassi, Belo Horizonte. Pode digitar o endereço completo.')+
+    '<div class="campo"><label for="r-espaco">Nome do espaço</label><input type="text" id="r-espaco" maxlength="60" value="'+esc(r.espaco)+'" placeholder="Ex.: Salão Jardim (opcional)"></div>'+pe(true,'Continuar');
+    ligarLocal('r-local');
+    $('#voltar').addEventListener('click',function(){guardarR();estado.passo=1;render();});
+    function guardarR(){r.data=val('r-data');r.inicio=val('r-ini');r.fim=val('r-fim');r.cidade=val('r-local');r.espaco=val('r-espaco');}
+    $('#avancar').addEventListener('click',function(){guardarR();if(!r.data)return erro('Escolha a data do evento.');if(r.data<min)return erro('Escolha uma data a partir de amanhã.');if(!r.cidade)return erro('Preencha o local do evento.');estado.passo=3;render();});
+  } else if(n===3){
+    var t=totalReserva(r);
+    var linhas=r.itens.filter(function(it){return it.qtd>0;}).map(function(it){return '<div style="display:flex;justify-content:space-between;gap:12px"><span>'+it.qtd+'× '+esc(it.nome)+' <span style="color:var(--suave)">· '+brl(it.valor)+' cada</span></span><span>'+brl(it.qtd*it.valor)+'</span></div>';}).join('');
+    b.innerHTML='<h2>Confirmar reserva</h2><p class="sub">Passo 4 de 4 · Confira e escolha como pagar.</p>'+
+    '<div class="caixa" style="background:var(--nevoa);border:none;font-size:15px;display:flex;flex-direction:column;gap:8px">'+
+      '<div><b class="disp" style="font-size:19px">'+esc(r.nome||r.evento)+'</b><div style="color:var(--suave);font-size:14px">'+esc(r.evento)+' · '+dataLonga(r.data)+' · '+hora(r.inicio)+' às '+hora(r.fim)+'<br>'+(r.espaco?esc(r.espaco)+', ':'')+esc(r.cidade)+'</div></div>'+
+      linhas+'<div style="display:flex;justify-content:space-between;border-top:1px solid var(--borda-2);padding-top:8px;font-size:16px"><b>Total da equipe</b><b>'+brl(t)+'</b></div></div>'+
+    '<div class="pagopc" style="margin-top:16px" role="group" aria-label="Forma de pagamento">'+
+      '<button type="button" data-pg="deposito" aria-pressed="'+(r.pag==='deposito')+'"><b>Depósito de 20%</b><span class="disp" style="font-size:26px;font-weight:700">'+brl(t*0.2)+' agora</span><span class="s">Restante de '+brl(t*0.8)+' até 7 dias antes do evento. Sem acréscimo.</span></button>'+
+      '<button type="button" data-pg="depois" aria-pressed="'+(r.pag==='depois')+'"><b>Pagar depois do evento</b><span class="disp" style="font-size:26px;font-weight:700">'+brl(t*1.15)+'</span><span class="s">Valor total + 15%, pago até 30 dias depois do evento.</span></button>'+
+    '</div>'+pe(true,'Reservar');
+    $$('[data-pg]',b).forEach(function(x){x.addEventListener('click',function(){r.pag=x.dataset.pg;$$('[data-pg]',b).forEach(function(y){y.setAttribute('aria-pressed',y===x);});});});
+    $('#voltar').addEventListener('click',function(){estado.passo=2;render();});
+    $('#avancar').addEventListener('click',function(){
+      var bt=$('#avancar'); bt.disabled=true; bt.textContent='Enviando…';
+      var corpo={evento:r.evento,nome:r.nome||'',convidados:r.convidados||'',itens:r.itens.filter(function(it){return it.qtd>0;}).map(function(it){return {nome:it.nome,valor:it.valor,qtd:it.qtd,personalizado:!!it.custom};}),espaco:r.espaco||'',pessoas:qtdReserva(r),total:totalReserva(r),data:r.data,inicio:r.inicio,fim:r.fim,cidade:r.cidade,pagamento:r.pag,quando:new Date().toISOString()};
+      meuCadastro.lista=corpo; salvarLocal();
+      salvarDoc('lista',corpo).then(function(){ estado.passo=4; concluiu=true; render(); });
+    });
+  } else {
+    prog(3,4);
+    b.innerHTML='<div style="text-align:center"><div class="ok-ic"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#6D28D9" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>'+
+    '<h2>Ainda não disponível, você entrou na lista</h2>'+
+    '<p class="sub">O Toppa ainda está em fase de teste e as reservas não estão abertas. <b>Nenhuma cobrança foi feita.</b> Guardamos o seu pedido e vamos avisar quando a plataforma lançar.</p></div>'+
+    '<div class="resumo">'+esc(r.nome||r.evento)+' · '+dataLonga(r.data)+' · '+qtdReserva(r)+' pessoa(s) · '+(r.pag==='deposito'?'Depósito de 20%':'Pagar depois do evento (+15%)')+'</div>'+
+    '<div class="modal-pe"><span></span><button class="btn btn-roxo" id="ok-lista">Entendi</button></div>'+btnAvaliar();
+    $('#ok-lista').addEventListener('click',fechar);
+    ligarAvaliar();
+  }
+}
+
+/* ---- Avaliação do protótipo ---- */
+function renderFeedback(b){
+  var fb=estado.fb; prog(0,0);
+  if(estado.passo===1){
+    b.innerHTML='<div style="text-align:center"><div class="ok-ic">'+CHECK.replace('16','34').replace('16','34')+'</div><h2>Obrigado pelo feedback!</h2><p class="sub">Sua opinião ajuda a deixar o Toppa melhor antes do lançamento.</p></div><div class="modal-pe"><span></span><button class="btn btn-roxo" id="fb-ok">Fechar</button></div>';
+    $('#fb-ok').addEventListener('click',fechar); return;
+  }
+  var star=function(i){return '<button type="button" data-st="'+i+'" aria-label="'+i+' de 5 estrelas" aria-pressed="'+(fb.nota===i)+'"><svg width="38" height="38" viewBox="0 0 24 24" aria-hidden="true"><path fill="'+(fb.nota>=i?'#6D28D9':'#DCD3F5')+'" d="M12 2l3 6.5 7 .8-5.2 4.8 1.4 7L12 17.6 5.8 21l1.4-7L2 9.3l7-.8z"/></svg></button>';};
+  var GOSTOU=['Perfis estilo Tinder','Verificação de documentos','Notas e estrelas','Reserva de equipe','Pagamento pelo app','Planos com desconto','Visual do app'];
+  b.innerHTML='<h2>O que você achou do Toppa?</h2><p class="sub">Leva 1 minuto. Sua resposta ajuda nosso projeto da faculdade.</p>'+
+  '<div class="campo"><span style="font-size:14px;font-weight:600" id="fb-n">Nota geral do protótipo *</span><div class="estrelas-in" role="group" aria-labelledby="fb-n">'+[1,2,3,4,5].map(star).join('')+'</div></div>'+
+  '<div class="campo"><span style="font-size:14px;font-weight:600" id="fb-f">Foi fácil de usar?</span><div class="chips" role="group" aria-labelledby="fb-f">'+['Muito fácil','Fácil','Um pouco confuso','Difícil'].map(function(o){return '<button type="button" data-fq="facil" aria-pressed="'+(fb.facil===o)+'">'+o+'</button>';}).join('')+'</div></div>'+
+  '<div class="campo"><span style="font-size:14px;font-weight:600" id="fb-u">Você usaria o Toppa? *</span><div class="chips" role="group" aria-labelledby="fb-u">'+['Sim, com certeza','Talvez','Não'].map(function(o){return '<button type="button" data-fq="usaria" aria-pressed="'+(fb.usaria===o)+'">'+o+'</button>';}).join('')+'</div></div>'+
+  '<div class="campo"><span style="font-size:14px;font-weight:600" id="fb-g">Do que você mais gostou?</span><div class="chips" role="group" aria-labelledby="fb-g">'+GOSTOU.map(function(o){return '<button type="button" data-gost="'+esc(o)+'" aria-pressed="'+(fb.gostou.indexOf(o)>=0)+'">'+esc(o)+'</button>';}).join('')+'</div></div>'+
+  '<div class="campo"><label for="fb-mel">O que você mudaria ou melhoraria?</label><textarea id="fb-mel" maxlength="500" placeholder="Pode ser sincero(a)!">'+esc(fb.melhorar)+'</textarea></div>'+pe(false,'Enviar avaliação');
+  $$('[data-st]',b).forEach(function(x){x.addEventListener('click',function(){fb.melhorar=val('fb-mel');fb.nota=Number(x.dataset.st);render();});});
+  $$('[data-fq]',b).forEach(function(x){x.addEventListener('click',function(){fb[x.dataset.fq]=x.textContent;$$('[data-fq="'+x.dataset.fq+'"]',b).forEach(function(y){y.setAttribute('aria-pressed',y===x);});});});
+  $$('[data-gost]',b).forEach(function(x){x.addEventListener('click',function(){var g=x.dataset.gost,i=fb.gostou.indexOf(g);if(i>=0)fb.gostou.splice(i,1);else fb.gostou.push(g);x.setAttribute('aria-pressed',fb.gostou.indexOf(g)>=0);});});
+  $('#avancar').addEventListener('click',function(){
+    fb.melhorar=val('fb-mel');
+    if(!fb.nota) return erro('Dê uma nota de 1 a 5 estrelas.');
+    if(!fb.usaria) return erro('Diga se você usaria o Toppa.');
+    var bt=$('#avancar'); bt.disabled=true; bt.textContent='Enviando…';
+    var corpo={nota:fb.nota,facil:fb.facil||'',usaria:fb.usaria,gostou:fb.gostou.slice(),melhorar:fb.melhorar||'',quando:new Date().toISOString()};
+    meuCadastro.feedback=corpo; salvarLocal();
+    avaliou=true; try{localStorage.setItem('toppa_avaliou','1');}catch(e){}
+    salvarDoc('feedbacks',corpo).then(function(){ estado.passo=1; render(); });
+  });
+}
+
+
+/* ---------- Vagas das empresas (modo app do freelancer) ---------- */
+var EVENTOS_BASE=[
+  {id:'v1',empresa:'Villa Serena Eventos',ini:'VS',cor:'#DDD3FA',nota:4.9,aval:87,desde:'2019',sobreEmp:'Espaço para casamentos e festas com equipe própria de cerimonial. Contrata freelancers toda semana na alta temporada.',
+   titulo:'Casamento Júlia e Pedro',tipo:'Casamento',funcao:'Bartender',area:'Gastronomia',valor:320,dias:4,inicio:'18:00',fim:'01:00',localNome:'Espaço Villa Serena',local:'Vila da Serra, Nova Lima',convidados:220,vagas:4,ocupadas:3,
+   desc:'Casamento ao ar livre com open bar de drinks clássicos e autorais. Bar montado pelo espaço; você cuida do preparo e do atendimento.',
+   funciona:[['17:30','Chegada e briefing com o chefe de bar'],['18:00','Abertura do bar no coquetel'],['21:30','Pausa de 30 min com jantar incluso'],['01:00','Encerramento e organização do bar']],
+   traje:'Calça preta, camisa social preta e sapato fechado',inclui:['Jantar no evento','Transporte de volta após 0h'],pagamento:'deposito',topa:true},
+  {id:'v2',empresa:'Grupo Horizonte Tech',ini:'GH',cor:'#E7E0FB',nota:4.7,aval:23,desde:'2021',sobreEmp:'Empresa de tecnologia com 300 funcionários. Organiza eventos internos e confraternizações.',
+   titulo:'Confraternização de fim de ano',tipo:'Evento corporativo',funcao:'Garçom',area:'Gastronomia',valor:190,dias:6,inicio:'19:00',fim:'23:30',localNome:'Rooftop da sede',local:'Savassi, Belo Horizonte',convidados:300,vagas:8,ocupadas:5,
+   desc:'Festa de fim de ano para os funcionários, com coquetel volante e finger food servidos nas bandejas.',
+   funciona:[['18:30','Chegada, uniforme e alinhamento'],['19:00','Serviço volante de bebidas e comidas'],['21:00','Pausa de 20 min com lanche'],['23:30','Recolhimento e encerramento']],
+   traje:'Todo preto. Avental fornecido pela empresa',inclui:['Lanche','Estacionamento'],pagamento:'depois',topa:false},
+  {id:'v3',empresa:'Prime Formaturas',ini:'PF',cor:'#D6CCF5',nota:4.8,aval:142,desde:'2015',sobreEmp:'Empresa de formaturas que atende as principais faculdades de BH.',
+   titulo:'Formatura de Medicina',tipo:'Formatura',funcao:'Recepcionista',area:'Recepção',valor:220,dias:9,inicio:'17:00',fim:'23:00',localNome:'Centro de convenções',local:'Gameleira, Belo Horizonte',convidados:1200,vagas:10,ocupadas:6,
+   desc:'Recepção e credenciamento dos convidados na colação de grau e no baile.',
+   funciona:[['16:30','Chegada e treinamento rápido do sistema de check-in'],['17:00','Credenciamento dos convidados'],['20:00','Pausa de 30 min com jantar'],['23:00','Encerramento']],
+   traje:'Roupa social escura. Lenço fornecido pela empresa',inclui:['Jantar','Vale-transporte'],pagamento:'deposito',topa:true},
+  {id:'v4',empresa:'Agência Pulsar',ini:'AP',cor:'#E4DAFD',nota:5.0,aval:31,desde:'2018',sobreEmp:'Agência de marketing que faz lançamentos de produtos e ativações de marca.',
+   titulo:'Lançamento de linha de cosméticos',tipo:'Lançamento de produto',funcao:'Fotógrafo(a)',area:'Fotografia e vídeo',valor:650,dias:3,inicio:'19:00',fim:'22:00',localNome:'Galeria de arte',local:'Lourdes, Belo Horizonte',convidados:120,vagas:1,ocupadas:0,
+   desc:'Cobertura fotográfica do lançamento para imprensa e redes sociais. Entrega de 30 fotos tratadas em até 48h.',
+   funciona:[['18:30','Chegada e alinhamento com a equipe de marketing'],['19:00','Fotos do ambiente e dos convidados'],['20:00','Fotos do palco e das falas'],['22:00','Encerramento']],
+   traje:'Roupa escura e discreta. Equipamento próprio',inclui:['Coquetel no evento'],pagamento:'deposito',topa:false},
+  {id:'v5',empresa:'Doce Festa Buffet',ini:'DF',cor:'#DDD3FA',nota:4.6,aval:58,desde:'2012',sobreEmp:'Buffet infantil e de festas de 15 anos.',
+   titulo:'Festa de 15 anos da Luiza',tipo:'Aniversário',funcao:'Garçom',area:'Gastronomia',valor:170,dias:10,inicio:'20:00',fim:'02:00',localNome:'Salão Doce Festa',local:'Buritis, Belo Horizonte',convidados:180,vagas:6,ocupadas:2,
+   desc:'Festa de debutante com jantar servido à francesa e pista de dança.',
+   funciona:[['19:30','Chegada e montagem das mesas'],['20:00','Recepção com bebidas'],['22:00','Serviço do jantar'],['02:00','Encerramento']],
+   traje:'Calça preta e camisa branca',inclui:['Jantar','Transporte de volta'],pagamento:'depois',topa:true},
+  {id:'v6',empresa:'Bar Santa Tereza',ini:'BS',cor:'#E7E0FB',nota:4.8,aval:44,desde:'2016',sobreEmp:'Bar com música ao vivo no bairro Santa Tereza.',
+   titulo:'Festa de fim de ano do bar',tipo:'Festa',funcao:'DJ',area:'Música e DJ',valor:900,dias:13,inicio:'22:00',fim:'03:00',localNome:'Bar Santa Tereza',local:'Santa Tereza, Belo Horizonte',convidados:250,vagas:1,ocupadas:0,
+   desc:'Set de 5 horas com MPB, pop nacional e anos 2000. Som do bar disponível.',
+   funciona:[['21:00','Passagem de som'],['22:00','Início do set'],['00:30','Pausa de 15 min'],['03:00','Encerramento']],
+   traje:'Livre',inclui:['Consumação de R$ 50'],pagamento:'deposito',topa:false},
+  {id:'v7',empresa:'Expo Mineira',ini:'EM',cor:'#D6CCF5',nota:4.7,aval:66,desde:'2010',sobreEmp:'Organizadora de feiras de negócios em Minas Gerais.',
+   titulo:'Feira de Negócios do Varejo',tipo:'Feira',funcao:'Recepcionista bilíngue',area:'Recepção',valor:260,dias:15,inicio:'09:00',fim:'18:00',localNome:'Centro de eventos',local:'Eldorado, Contagem',convidados:3000,vagas:12,ocupadas:7,
+   desc:'Atendimento a expositores e visitantes estrangeiros em português e inglês.',
+   funciona:[['08:30','Chegada e entrega do crachá'],['09:00','Abertura dos portões'],['12:30','Almoço de 1h'],['18:00','Encerramento']],
+   traje:'Roupa social. Camisa da feira fornecida',inclui:['Almoço','Vale-transporte'],pagamento:'deposito',topa:true},
+  {id:'v8',empresa:'Serra Azul Hotel',ini:'SA',cor:'#E4DAFD',nota:4.9,aval:39,desde:'2008',sobreEmp:'Hotel de eventos corporativos na zona sul de BH.',
+   titulo:'Convenção anual de vendas',tipo:'Evento corporativo',funcao:'Cerimonialista',area:'Eventos',valor:750,dias:20,inicio:'08:00',fim:'18:00',localNome:'Salão de convenções do hotel',local:'Belvedere, Belo Horizonte',convidados:400,vagas:1,ocupadas:0,
+   desc:'Condução do roteiro da convenção, chamada de palestrantes e controle de horários.',
+   funciona:[['07:00','Ensaio técnico'],['08:00','Abertura'],['12:00','Almoço'],['18:00','Encerramento']],
+   traje:'Traje social completo',inclui:['Almoço','Estacionamento'],pagamento:'depois',topa:false}
+];
+var AREA_DA_FUNCAO={'Garçom':'Gastronomia','Bartender':'Gastronomia','Cozinheiro(a)':'Gastronomia','Recepcionista':'Recepção','Recepcionista bilíngue':'Recepção','Fotógrafo(a)':'Fotografia e vídeo','Videomaker':'Fotografia e vídeo','DJ':'Música e DJ','Músico(a)':'Música e DJ','Cerimonialista':'Eventos','Produtor(a) de eventos':'Eventos','Promotor(a)':'Marketing','Social media':'Marketing','Designer':'Design','Segurança':'Outra','Auxiliar de limpeza':'Outra','Manobrista':'Outra','Outra função':'Outra'};
+function eventoDeEmpresa(e,emp,id){
+  emp=emp||{};
+  return {logo:fotoSegura(emp.logo),foto:fotoSegura(e.foto),id:'t-'+id,empresa:emp.nome||'Empresa de teste',ini:iniciais(emp.nome),cor:'#EDE7FB',nota:null,aval:0,desde:'2026',sobreEmp:'Empresa cadastrada na versão de teste do Toppa.'+(emp.segmento?' Segmento: '+emp.segmento+'.':''),teste:true,
+    titulo:e.evento||'Evento',tipo:emp.segmento||'Evento',funcao:e.areaBusca||'Freelancer',area:AREA_DA_FUNCAO[e.areaBusca]||e.areaBusca||'',valor:Number(e.cache)||0,data:e.data||'',inicio:e.inicio||'',fim:e.fim||'',localNome:'',local:e.evlocal||emp.cidade||'',convidados:'',vagas:Number(e.vagas)||1,ocupadas:0,
+    desc:e.funciona||'',funciona:[],traje:'',inclui:[],pagamento:'deposito',topa:true};
+}
+function ouvirEventos(){
+  try{
+    db.collection('eventos').limit(30).onSnapshot(function(snap){
+      snap.docs.forEach(function(d){ if(d.exists) docsEventos[d.id]=d.data(); });
+      if(!$('#app').hidden) renderApp();
+    },function(){});
+  }catch(e){}
+}
+function todosEventos(){
+  var emp=empresaInfo();
+  var proprios = meusEventos().slice().reverse().map(function(ev,i){ var o=eventoDeEmpresa(ev,emp,'meu-'+ev.id); o.sobreEmp='Sua empresa de teste.'; return o; });
+  return proprios.concat(eventosDeTeste(), EVENTOS_BASE.map(function(v){ var c={}; for(var k in v) c[k]=v[k]; c.data=dataRel(v.dias); return c; }));
+}
+var app={modo:'freela',aba:'vagas',filtro:null,idx:0,filtroEmp:null,idxEmp:0,evSel:null};
+function appDados(){ meuCadastro.app=meuCadastro.app||{topadas:[]}; return meuCadastro.app; }
+function eventosFiltrados(){
+  var L=todosEventos(), f=meuCadastro.freela||{};
+  var meus=L.filter(function(v){return v.area===f.area;});
+  if(app.filtro===null) app.filtro = meus.length? 'voce' : 'todas';
+  if(app.filtro==='voce') return meus;
+  if(app.filtro==='semana'){ var lim=dataRel(7); return L.filter(function(v){return v.data && v.data<=lim;}); }
+  if(app.filtro==='pagas') return L.slice().sort(function(a,b){return b.valor-a.valor;});
+  return L;
+}
+var ABAS={
+  freela:[['vagas','Vagas','<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>'],['topadas','Topadas','<path d="M20 6L9 17l-5-5"/>'],['perfil','Perfil','<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/>']],
+  empresa:[['talentos','Talentos','<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.5 3-6 6.5-6s6.5 2.5 6.5 6"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14c2 .7 3.5 2.8 3.5 6"/>'],['eventos','Meus eventos','<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>'],['empresa','Empresa','<path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/>']]
+};
+function renderTabs(){
+  var cont = app.modo==='freela'? appDados().topadas.length : (function(){ var n=0; meusEventos().forEach(function(ev){ n+=candidatos(ev).filter(function(c){return c.status==='topou';}).length; }); return n; })();
+  $('#app-tabs').innerHTML=ABAS[app.modo].map(function(a,i){
+    var on=a[0]===app.aba;
+    return '<button role="tab" id="app-tab-'+a[0]+'" data-aba="'+a[0]+'" aria-selected="'+on+'"'+(on?'':' tabindex="-1"')+'><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+a[2]+'</svg>'+a[1]+(i===1&&cont?' <span class="cont">'+cont+'</span>':'')+'</button>';
+  }).join('');
+}
+function abrirApp(aba,modo){
+  app.modo=modo||app.modo||'freela';
+  if(app.modo==='freela' && !meuCadastro.freela){ abrir('freela'); return; }
+  if(app.modo==='empresa' && !meuCadastro.empresa){ abrir('empresa'); return; }
+  app.aba=aba||ABAS[app.modo][0][0]; app.idx=0; app.idxEmp=0; app.filtroEmp=null;
+  $('#app').setAttribute('aria-label', app.modo==='freela'?'Toppa, app do freelancer':'Toppa, app da empresa');
+  $('#app').hidden=false; document.body.style.overflow='hidden';
+  renderApp();
+  try{ $('#app-tab-'+app.aba).focus(); }catch(e){}
+}
+function sairApp(){
+  $('#app').hidden=true; document.body.style.overflow='';
+  if(concluiu && !avaliou && !pediuFeedback){ concluiu=false; pedirFeedback(); }
+}
+var IC_CAL='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>';
+var IC_RELOGIO='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>';
+var IC_PESSOAS='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.5 3-6 6.5-6s6.5 2.5 6.5 6"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14c2 .7 3.5 2.8 3.5 6"/></svg>';
+function renderApp(){
+  renderTabs();
+  var m=$('#app-main'); m.scrollTop=0;
+  if(app.modo==='empresa'){ if(app.aba==='talentos') renderTalentos(m); else if(app.aba==='eventos') renderMeusEventos(m); else renderEmpresaPerfil(m); return; }
+  if(app.aba==='vagas') renderVagas(m); else if(app.aba==='topadas') renderTopadas(m); else renderMeuPerfil(m);
+}
+function pagamentoHtml(v){
+  return '<div class="pg-linha"><span>Valor do turno</span><b>'+brl(v.valor)+'</b></div>'+
+    '<div class="pg-linha"><span>Receber no prazo padrão<small>Sem taxa, quando a empresa paga pelo app</small></span><b>'+brl(v.valor)+'</b></div>'+
+    '<div class="pg-linha"><span>Receber em até 24h<small>Taxa de 5% ('+brl(v.valor*0.05)+')</small></span><b style="color:var(--roxo-esc)">'+brl(v.valor*0.95)+'</b></div>'+
+    '<p class="pg-nota">'+(v.pagamento==='deposito'?'<span class="status ok" style="margin-right:6px">Depósito garantido</span> A empresa já pagou 20% pelo app.':'<span class="status esp" style="margin-right:6px">Paga após o evento</span> A empresa paga até 30 dias depois.')+' O Toppa transfere direto para a sua conta.</p>';
+}
+function cartaoVaga(v,i,total){
+  var rest=Math.max(0,v.vagas-v.ocupadas);
+  return '<div class="vaga">'+
+    '<div class="vaga-top" style="background:'+v.cor+'"><span class="emp-logo">'+(v.logo?'<img src="'+v.logo+'" alt="Logo da '+esc(v.empresa)+'">':esc(v.ini))+'</span><div style="min-width:0"><b style="display:block;font-size:16px">'+esc(v.empresa)+'</b><small style="color:var(--texto);font-size:13px">'+(v.nota?'★ '+v.nota.toFixed(1).replace('.',',')+' · '+v.aval+' avaliações · ✓ Verificada':'Empresa de teste')+'</small></div><span class="pill-n">'+(i+1)+' de '+total+'</span></div>'+
+    (v.foto?'<img class="vaga-foto" src="'+v.foto+'" alt="Foto do evento '+esc(v.titulo)+'">':'')+
+    '<div class="vaga-corpo">'+
+      '<div style="display:flex;gap:8px;flex-wrap:wrap"><span class="tag">'+esc(v.tipo)+'</span>'+(v.convidados?'<span class="tag">'+v.convidados+' convidados</span>':'')+'</div>'+
+      '<div><h3 class="disp" style="margin:0;font-size:28px;letter-spacing:-.5px">'+esc(v.funcao)+'</h3><div style="color:var(--texto);font-weight:500;margin-top:2px">'+esc(v.titulo)+'</div></div>'+
+      '<div class="vaga-valor"><b class="disp">'+(v.valor?brl(v.valor).replace(',00',''):'A combinar')+'</b><span>por turno</span><span class="pg-24">'+(v.valor?'ou '+brl(v.valor*0.95)+' em 24h':'')+'</span></div>'+
+      '<div class="info-l">'+IC_CAL+'<span><b>'+dataLonga(v.data)+'</b>'+(v.inicio?' · '+hora(v.inicio)+' às '+hora(v.fim):'')+'</span></div>'+
+      '<div class="info-l">'+IC_PIN+'<span>'+(v.localNome?esc(v.localNome)+' · ':'')+esc(v.local)+'</span></div>'+
+      '<div class="info-l">'+IC_PESSOAS+'<span>'+(rest===1?'<b>Última vaga</b>':'<b>'+rest+' vagas</b> de '+v.vagas)+'</span></div>'+
+    '</div>'+
+    '<div class="overlay-topou" id="ov-vaga"></div>'+
+  '</div>';
+}
+function renderVagas(m){
+  var f=meuCadastro.freela, L=eventosFiltrados(), d=appDados();
+  var chips=[['voce','Para você'],['todas','Todas'],['semana','Próximos 7 dias'],['pagas','Mais bem pagas']];
+  var head='<div class="app-head"><div><h1 class="disp" style="margin:0;font-size:30px;letter-spacing:-.5px">Olá, '+esc(String(f.nome).split(' ')[0])+'</h1><p style="margin:4px 0 0;color:var(--suave)">Vagas de empresas verificadas perto de <b style="color:var(--tinta)">'+esc(f.cidade)+'</b></p></div>'+
+    '<div class="chips" role="group" aria-label="Filtrar vagas">'+chips.map(function(c){return '<button type="button" data-fil="'+c[0]+'" aria-pressed="'+(app.filtro===c[0])+'">'+c[1]+'</button>';}).join('')+'</div></div>';
+  if(!L.length || app.idx>=L.length){
+    m.innerHTML='<div class="app-in">'+head+'<div class="vazio"><h2 class="disp" style="margin:0 0 8px">'+(L.length?'Você viu todas as vagas':'Nenhuma vaga neste filtro')+'</h2><p style="margin:0 0 18px;color:var(--suave)">'+(L.length?'Novas vagas aparecem toda semana.':'Veja todas as vagas disponíveis.')+'</p><div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">'+(L.length?'<button class="btn btn-borda" id="vg-recomecar">Ver de novo</button>':'')+'<button class="btn btn-roxo" id="vg-todas">Ver todas as vagas</button></div></div></div>';
+    ligarFiltros(m);
+    var rc=$('#vg-recomecar'); if(rc) rc.addEventListener('click',function(){app.idx=0;renderApp();});
+    $('#vg-todas').addEventListener('click',function(){app.filtro='todas';app.idx=0;renderApp();});
+    return;
+  }
+  var v=L[app.idx];
+  var ja=d.topadas.some(function(t){return t.id===v.id;});
+  m.innerHTML='<div class="app-in">'+head+
+  '<div class="deck-area">'+
+    '<div style="flex:1 1 360px;max-width:440px;min-width:0">'+cartaoVaga(v,app.idx,L.length)+
+      '<div class="acoes acoes-vaga">'+
+        '<button class="redondo" style="width:48px;height:48px" id="vg-voltar" aria-label="Vaga anterior"'+(app.idx===0?' disabled':'')+'><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="#6B6580" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-2"/></svg></button>'+
+        '<button class="redondo" style="width:64px;height:64px" id="vg-passar" aria-label="Passar vaga"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#4B4560" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>'+
+        '<button class="btn btn-roxo topar-btn" id="vg-topar"'+(ja?' disabled':'')+'><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>'+(ja?'Você já topou':'Topar')+'</button>'+
+      '</div>'+
+    '</div>'+
+    '<div class="detalhes">'+
+      '<div class="caixa"><h4>Pagamento</h4>'+pagamentoHtml(v)+'</div>'+
+      (v.funciona.length?'<div class="caixa"><h4>Como vai funcionar</h4><ol class="linha-tempo">'+v.funciona.map(function(x){return '<li><span class="hora">'+hora(x[0])+'</span><span>'+esc(x[1])+'</span></li>';}).join('')+'</ol></div>':'')+
+      '<div class="caixa"><h4>O evento</h4>'+(v.desc?'<p style="margin:0 0 14px;color:var(--texto);line-height:1.6">'+esc(v.desc)+'</p>':'')+
+        '<div class="ficha">'+
+          (v.traje?'<div><small>Traje</small><span>'+esc(v.traje)+'</span></div>':'')+
+          (v.inclui.length?'<div><small>Incluso</small><span>'+v.inclui.map(esc).join(' · ')+'</span></div>':'')+
+          '<div><small>Endereço</small><span>'+(v.localNome?esc(v.localNome)+', ':'')+esc(v.local)+'</span></div>'+
+        '</div></div>'+
+      '<div class="caixa"><h4>Sobre a '+esc(v.empresa)+'</h4><p style="margin:0;color:var(--texto);line-height:1.6">'+esc(v.sobreEmp)+'</p>'+(v.nota?'<p style="margin:10px 0 0;font-size:14px;color:var(--suave)">No Toppa desde '+v.desde+' · nota '+v.nota.toFixed(1).replace('.',',')+' dada pelos freelancers</p>':'')+'</div>'+
+      '<p class="lembrete">Topou e não vai poder ir? Cancele com pelo menos 24h de antecedência para não levar penalidade.</p>'+
+    '</div>'+
+  '</div></div>';
+  ligarFiltros(m);
+  $('#vg-passar').addEventListener('click',function(){app.idx++;renderApp();});
+  $('#vg-voltar').addEventListener('click',function(){app.idx=Math.max(0,app.idx-1);renderApp();});
+  $('#vg-topar').addEventListener('click',function(){
+    d.topadas.unshift({id:v.id,status:v.topa?'confirmado':'aguardando',quando:new Date().toISOString(),ev:{empresa:v.empresa,funcao:v.funcao,titulo:v.titulo,data:v.data,inicio:v.inicio,fim:v.fim,local:v.local,localNome:v.localNome,valor:v.valor,pagamento:v.pagamento}});
+    salvarLocal(); salvarTopadas();
+    renderTabs();
+    var ov=$('#ov-vaga');
+    if(v.topa){
+      ov.innerHTML='<span class="disp" style="font-size:44px;font-weight:700;letter-spacing:-1px">Topou!</span><span style="color:#D6CCF5;max-width:300px;line-height:1.5">Você topou e a '+esc(v.empresa)+' topou também. O chat foi liberado para combinar os detalhes.</span><button class="btn btn-branco" id="ova-ver" style="min-width:230px">Ver minhas topadas</button><button class="btn" id="ova-seguir" style="min-width:230px;background:transparent;color:#fff;border:1.5px solid #7C5CC4">Continuar vendo vagas</button>';
+      ov.classList.add('show'); $('#ova-ver').focus();
+      $('#ova-ver').addEventListener('click',function(){app.aba='topadas';renderApp();});
+      $('#ova-seguir').addEventListener('click',function(){app.idx++;renderApp();});
+    } else {
+      toast('Você topou! Agora é só esperar a '+v.empresa+' responder.');
+      app.idx++; renderApp();
+    }
+  });
+}
+function ligarFiltros(m){ $$('[data-fil]',m).forEach(function(x){x.addEventListener('click',function(){app.filtro=x.dataset.fil;app.idx=0;renderApp();});}); }
+function salvarTopadas(){ if(!db||!uid) return; var d=appDados(); db.doc('topadas/'+uid).set({lista:d.topadas.map(function(t){return {id:t.id,status:t.status,funcao:t.ev.funcao,empresa:t.ev.empresa,quando:t.quando};}),atualizado:new Date().toISOString()}).catch(function(){}); }
+function renderTopadas(m){
+  var d=appDados();
+  if(!d.topadas.length){
+    m.innerHTML='<div class="app-in"><h1 class="disp" style="margin:0 0 18px;font-size:30px">Minhas topadas</h1><div class="vazio"><h2 class="disp" style="margin:0 0 8px">Você ainda não topou nenhuma vaga</h2><p style="margin:0 0 18px;color:var(--suave)">Quando você topar uma vaga, ela aparece aqui com o status da empresa.</p><button class="btn btn-roxo" id="tp-ir">Ver vagas</button></div></div>';
+    $('#tp-ir').addEventListener('click',function(){app.aba='vagas';renderApp();}); return;
+  }
+  var conf=d.topadas.filter(function(t){return t.status==='confirmado';});
+  var ganhos=conf.reduce(function(a,t){return a+(t.ev.valor||0);},0);
+  m.innerHTML='<div class="app-in"><h1 class="disp" style="margin:0 0 6px;font-size:30px">Minhas topadas</h1><p style="margin:0 0 20px;color:var(--suave)">'+conf.length+' confirmada(s) · '+(d.topadas.length-conf.length)+' aguardando a empresa · <b style="color:var(--tinta)">'+brl(ganhos)+'</b> em trabalhos confirmados</p>'+
+  '<div style="display:flex;flex-direction:column;gap:12px">'+d.topadas.map(function(t,i){
+    var e=t.ev, dt=new Date((e.data||dataRel(0))+'T12:00:00');
+    return '<div class="topada"><div class="dia"><small>'+MESES[dt.getMonth()]+'</small><b>'+dt.getDate()+'</b><small style="color:var(--suave);font-weight:600">'+DIAS_SEM[dt.getDay()]+'</small></div>'+
+      '<div style="flex:1;min-width:200px"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:flex-start"><div><b style="font-size:17px">'+esc(e.funcao)+'</b><div style="color:var(--texto);font-size:14.5px">'+esc(e.titulo)+' · '+esc(e.empresa)+'</div></div><b class="disp" style="font-size:20px">'+brl(e.valor)+'</b></div>'+
+      '<div style="font-size:14px;color:var(--suave);margin:6px 0 10px">'+(e.inicio?hora(e.inicio)+' às '+hora(e.fim)+' · ':'')+(e.localNome?esc(e.localNome)+', ':'')+esc(e.local)+'</div>'+
+      '<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">'+(t.status==='confirmado'?'<span class="status ok">✓ A empresa topou · chat liberado</span>':'<span class="status esp">Aguardando a empresa</span>')+
+      '<button class="btn btn-ghost" style="min-height:40px;padding:8px 12px" data-cancelar="'+i+'">Cancelar</button></div></div></div>';
+  }).join('')+'</div></div>';
+  $$('[data-cancelar]',m).forEach(function(x){x.addEventListener('click',function(){
+    var i=Number(x.dataset.cancelar), t=d.topadas[i];
+    if(x.dataset.conf!=='1'){ x.dataset.conf='1'; x.textContent='Confirmar cancelamento'; x.style.color='#B42318'; return; }
+    d.topadas.splice(i,1); salvarLocal(); salvarTopadas(); toast('Topada cancelada: '+t.ev.funcao+' · '+t.ev.empresa+'.'); renderApp();
+  });});
+}
+function renderMeuPerfil(m){
+  var f=meuCadastro.freela, d=appDados(), p=deParaPerfil(f,true);
+  var conf=d.topadas.filter(function(t){return t.status==='confirmado';}).length;
+  m.innerHTML='<div class="app-in"><h1 class="disp" style="margin:0 0 18px;font-size:30px">Meu perfil</h1><div class="deck-area">'+
+    '<div class="cartao" style="flex:1 1 340px;max-width:440px"><div class="foto" style="height:200px;background:var(--lilas-2)">'+fotoOuIni(p)+'<span class="pill" style="left:16px;background:#fff;color:var(--roxo-esc)">✓ Verificado (teste)</span></div>'+
+      '<div class="corpo"><div><b class="disp" style="font-size:26px">'+esc(f.nome)+(f.idade?', '+esc(f.idade):'')+'</b><div style="color:var(--texto);font-weight:500">'+esc(f.titulo)+'</div><div style="font-size:14px;color:var(--suave)">'+esc(f.cidade)+' · '+esc(f.area)+'</div></div>'+
+      '<div style="display:flex;flex-wrap:wrap;gap:8px">'+(f.habilidades||[]).map(function(t){return '<span class="tag">'+esc(t)+'</span>';}).join('')+'</div>'+
+      (f.sobre?'<p style="margin:0;color:var(--texto);line-height:1.6">'+esc(f.sobre)+'</p>':'')+'</div></div>'+
+    '<div class="detalhes">'+portfolioHtml(p)+
+      '<div class="mini"><div><small>Trabalhos feitos</small><b>0</b></div><div><small>Nota</small><b>Novo</b></div><div><small>Topadas</small><b>'+d.topadas.length+'</b></div><div><small>Confirmadas</small><b>'+conf+'</b></div></div>'+
+      '<div class="caixa"><h4>Regras que você aceitou</h4><ul class="lista-regras"><li><b>Avaliação por turno.</b> A empresa dá de 1 a 5 estrelas depois de cada turno.</li><li><b>Falta sem aviso (no-show).</b> Cancele com 24h de antecedência para evitar penalidade.</li><li><b>Receber em 24h.</b> Opcional, com taxa de 5%. No prazo padrão não há taxa.</li></ul></div>'+
+      '<div class="caixa" style="display:flex;flex-direction:column;gap:10px"><h4 style="margin:0">Continue testando</h4><button class="btn btn-borda" id="pf-empresa">Testar o lado empresa</button>'+(avaliou?'':'<button class="btn btn-roxo" id="pf-avaliar">Avaliar o protótipo</button>')+'</div>'+
+    '</div></div></div>';
+  $('#pf-empresa').addEventListener('click',function(){ $('#app').hidden=true; document.body.style.overflow=''; if(meuCadastro.empresa) abrirApp('talentos','empresa'); else abrir('empresa'); });
+  var av=$('#pf-avaliar'); if(av) av.addEventListener('click',function(){ $('#app').hidden=true; document.body.style.overflow=''; concluiu=false; abrir('feedback'); });
+}
+$('#app-tabs').addEventListener('click',function(ev){ var t=ev.target.closest('[role=tab]'); if(!t) return; app.aba=t.dataset.aba; renderApp(); try{$('#app-tab-'+app.aba).focus();}catch(e){} });
+$('#app-tabs').addEventListener('keydown',function(ev){ if(ev.key!=='ArrowRight'&&ev.key!=='ArrowLeft') return; var L=ABAS[app.modo], i=L.map(function(a){return a[0];}).indexOf(app.aba); ev.preventDefault(); app.aba=L[(i+(ev.key==='ArrowRight'?1:L.length-1))%L.length][0]; renderApp(); try{$('#app-tab-'+app.aba).focus();}catch(e){} });
+$('#app-sair').addEventListener('click',sairApp);
+document.addEventListener('keydown',function(ev){ if(ev.key==='Escape' && !$('#app').hidden && !$('#modal-bg').classList.contains('show')) sairApp(); });
+
+/* ---------- App da empresa (contratante) ---------- */
+function empDados(){ meuCadastro.appEmp=meuCadastro.appEmp||{convites:[],decisoes:{},pagos:{}}; return meuCadastro.appEmp; }
+function todosFreelas(){ return perfisDeTeste().concat(BASE.map(function(p){ var o={}; for(var k in p) o[k]=p[k]; o.key='b-'+p.ini; return o; })); }
+function freelaPorChave(k){ return todosFreelas().filter(function(p){return p.key===k;})[0]; }
+function eventoSel(){ var L=meusEventos(); return L.filter(function(e){return e.id===app.evSel;})[0] || L[L.length-1]; }
+function freelasFiltrados(){
+  var L=todosFreelas(), ev=eventoSel(), area=ev? AREA_DA_FUNCAO[ev.areaBusca] : null;
+  if(app.filtroEmp===null) app.filtroEmp = area && L.some(function(p){return p.area===area;}) ? 'evento' : 'todos';
+  if(app.filtroEmp==='evento') return L.filter(function(p){return p.area===area;});
+  if(app.filtroEmp==='melhores') return L.filter(function(p){return p.nota;}).sort(function(a,b){return b.nota-a.nota;});
+  if(app.filtroEmp==='novos') return L.filter(function(p){return p.novo;});
+  return L;
+}
+function candidatos(ev){
+  var d=empDados(), area=AREA_DA_FUNCAO[ev.areaBusca], vistos={}, out=[];
+  d.convites.filter(function(c){return c.eventoId===ev.id;}).forEach(function(c){ var p=freelaPorChave(c.key); if(p){ vistos[c.key]=1; out.push({p:p,status:c.status,origem:'convite'}); } });
+  todosFreelas().filter(function(p){return p.area===area && !vistos[p.key];}).slice(0,3).forEach(function(p){
+    var st=(d.decisoes[ev.id]||{})[p.key]||'topou'; if(st!=='recusado') out.push({p:p,status:st,origem:'auto'});
+  });
+  return out;
+}
+function cartaoFreela(p,i,total){
+  var nota = p.novo
+    ? '<div><b class="disp" style="font-size:19px">Novo no Toppa</b><div style="font-size:13px;color:var(--suave)">Perfil de teste · sem avaliações</div></div><div style="text-align:right"><b class="disp" style="font-size:26px;color:var(--roxo)">0</b><div style="font-size:13px;color:var(--suave)">trabalhos</div></div>'
+    : '<div><div style="display:flex;align-items:center;gap:8px"><b class="disp" style="font-size:26px">'+p.nota.toFixed(1).replace('.',',')+'</b><span class="estrelas" role="img" aria-label="Nota '+p.nota.toFixed(1).replace('.',',')+' de 5">'+estrelasHtml(p.nota)+'</span></div><div style="font-size:13px;color:var(--suave)">'+p.aval+' avaliações</div></div><div style="text-align:right"><b class="disp" style="font-size:26px;color:var(--roxo)">'+p.trab+'</b><div style="font-size:13px;color:var(--suave)">trabalhos feitos</div></div>';
+  return '<div class="cartao"><div class="foto" style="background:'+p.cor+'">'+fotoOuIni(p)+'<span class="pill" style="left:16px;background:#fff;color:var(--roxo-esc)">'+(p.novo?'Perfil de teste':'✓ Verificado')+'</span><span class="pill" style="right:16px;background:var(--roxo-noite);color:#fff">'+(i+1)+' de '+total+'</span></div>'+
+    '<div class="corpo"><div><b class="disp" style="font-size:26px">'+esc(p.nome)+(p.idade?', '+esc(p.idade):'')+'</b><div style="color:var(--texto);font-weight:500;margin-top:2px">'+esc(p.papel)+'</div><div style="font-size:14px;color:var(--suave)">'+esc(p.cidade)+'</div></div>'+
+    '<div class="nota">'+nota+'</div><div style="display:flex;flex-wrap:wrap;gap:8px">'+p.tags.map(function(t){return '<span class="tag">'+esc(t)+'</span>';}).join('')+'</div></div>'+
+    '<div class="overlay-topou" id="ov-freela"></div></div>';
+}
+function renderTalentos(m){
+  var emp=empresaInfo(), L=freelasFiltrados(), d=empDados(), ev=eventoSel(), evs=meusEventos();
+  var chips=[['evento',ev?'Para '+ev.areaBusca:'Para seu evento'],['todos','Todos'],['melhores','Mais bem avaliados'],['novos','Novos no Toppa']];
+  var head='<div class="app-head"><div><h1 class="disp" style="margin:0;font-size:30px;letter-spacing:-.5px">Olá, '+esc(emp.nome)+'</h1><p style="margin:4px 0 0;color:var(--suave)">Freelancers verificados perto de <b style="color:var(--tinta)">'+esc(emp.cidade)+'</b></p></div>'+
+    '<div class="chips" role="group" aria-label="Filtrar talentos">'+chips.map(function(c){return '<button type="button" data-fe="'+c[0]+'" aria-pressed="'+(app.filtroEmp===c[0])+'">'+esc(c[1])+'</button>';}).join('')+'</div></div>'+
+    (evs.length>1?'<div class="campo" style="max-width:420px"><label for="ev-sel">Contratando para</label><select id="ev-sel">'+evs.map(function(e){return '<option value="'+e.id+'"'+(ev&&e.id===ev.id?' selected':'')+'>'+esc(e.evento)+' · '+esc(e.areaBusca)+'</option>';}).join('')+'</select></div>':'');
+  function ligar(){
+    $$('[data-fe]',m).forEach(function(x){x.addEventListener('click',function(){app.filtroEmp=x.dataset.fe;app.idxEmp=0;renderApp();});});
+    var sel=$('#ev-sel'); if(sel) sel.addEventListener('change',function(){app.evSel=sel.value;app.filtroEmp=null;app.idxEmp=0;renderApp();});
+  }
+  if(!L.length || app.idxEmp>=L.length){
+    m.innerHTML='<div class="app-in">'+head+'<div class="vazio"><h2 class="disp" style="margin:0 0 8px">'+(L.length?'Você viu todos os talentos':'Ninguém neste filtro ainda')+'</h2><p style="margin:0 0 18px;color:var(--suave)">Novos freelancers entram no Toppa toda semana.</p><div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">'+(L.length?'<button class="btn btn-borda" id="tl-rec">Ver de novo</button>':'')+'<button class="btn btn-roxo" id="tl-todos">Ver todos</button></div></div></div>';
+    ligar(); var r=$('#tl-rec'); if(r) r.addEventListener('click',function(){app.idxEmp=0;renderApp();});
+    $('#tl-todos').addEventListener('click',function(){app.filtroEmp='todos';app.idxEmp=0;renderApp();}); return;
+  }
+  var p=L[app.idxEmp];
+  var ja=ev && d.convites.some(function(c){return c.key===p.key && c.eventoId===ev.id;});
+  var qual = p.qual.length? p.qual.map(function(q){return '<div style="display:flex;justify-content:space-between;padding:11px 14px;border-radius:12px;background:var(--nevoa);font-size:14px;font-weight:600"><span>✓ '+esc(q[0])+'</span><span style="color:var(--roxo-esc)">'+q[1]+'×</span></div>';}).join('') : '<p style="margin:0;color:var(--suave);font-size:14px">As qualidades aparecem conforme o perfil recebe avaliações.</p>';
+  var barras = p.novo? '' : '<div class="caixa"><h4>Distribuição das notas</h4>'+p.dist.map(function(v,i){return '<div style="display:flex;align-items:center;gap:10px;margin:6px 0;font-size:13px"><span style="width:28px;font-weight:600">'+(5-i)+'★</span><span class="barra"><i style="width:'+v+'%"></i></span><span style="width:36px;text-align:right;color:var(--suave)">'+v+'%</span></div>';}).join('')+'</div>';
+  m.innerHTML='<div class="app-in">'+head+'<div class="deck-area">'+
+    '<div style="flex:1 1 360px;max-width:440px;min-width:0">'+cartaoFreela(p,app.idxEmp,L.length)+
+      '<div class="acoes acoes-vaga">'+
+        '<button class="redondo" style="width:48px;height:48px" id="tl-voltar" aria-label="Perfil anterior"'+(app.idxEmp===0?' disabled':'')+'><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="#6B6580" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-2"/></svg></button>'+
+        '<button class="redondo" style="width:64px;height:64px" id="tl-passar" aria-label="Passar perfil"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#4B4560" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>'+
+        '<button class="btn btn-roxo topar-btn" id="tl-topar"'+(ja||!ev?' disabled':'')+'><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>'+(ja?'Você já topou':'Topar')+'</button>'+
+      '</div>'+(ev?'':'<p class="lembrete" style="text-align:center">Publique uma vaga para poder topar freelancers.</p>')+
+    '</div>'+
+    '<div class="detalhes">'+
+      '<div class="mini"><div><small>Trabalhos</small><b>'+p.trab+'</b></div><div><small>Experiência</small><b>'+esc(p.anos)+'</b></div><div><small>Recontratação</small><b>'+esc(p.recont)+'</b></div></div>'+
+      portfolioHtml(p)+'<div class="caixa"><h4>Sobre</h4><p style="margin:0 0 16px;color:var(--texto);line-height:1.6">'+(esc(p.sobre)||'—')+'</p><h4>Qualidades mais elogiadas</h4><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px">'+qual+'</div></div>'+
+      barras+
+      (ev?'<div class="caixa"><h4>Se vocês toparem</h4><p style="margin:0;color:var(--texto);line-height:1.6">'+esc(p.nome.split(' ')[0])+' entra na equipe de <b>'+esc(ev.evento)+'</b> como '+esc(ev.areaBusca)+', por <b>'+brl(ev.cache)+'</b> o turno, pago pelo app.</p></div>':'')+
+    '</div></div></div>';
+  ligar();
+  $('#tl-passar').addEventListener('click',function(){app.idxEmp++;renderApp();});
+  $('#tl-voltar').addEventListener('click',function(){app.idxEmp=Math.max(0,app.idxEmp-1);renderApp();});
+  $('#tl-topar').addEventListener('click',function(){
+    var st=p.topa?'confirmado':'aguardando';
+    d.convites.unshift({key:p.key,eventoId:ev.id,status:st,quando:new Date().toISOString()}); salvarLocal();
+    if(st==='confirmado'){
+      var ov=$('#ov-freela');
+      ov.innerHTML='<span class="disp" style="font-size:44px;font-weight:700;letter-spacing:-1px">Topou!</span><span style="color:#D6CCF5;max-width:300px;line-height:1.5">Você topou e '+esc(p.nome.split(' ')[0])+' topou também. Agora faz parte da equipe de '+esc(ev.evento)+'.</span><button class="btn btn-branco" id="ovf-ver" style="min-width:230px">Ver meus eventos</button><button class="btn" id="ovf-seguir" style="min-width:230px;background:transparent;color:#fff;border:1.5px solid #7C5CC4">Continuar vendo talentos</button>';
+      ov.classList.add('show'); $('#ovf-ver').focus();
+      $('#ovf-ver').addEventListener('click',function(){app.aba='eventos';renderApp();});
+      $('#ovf-seguir').addEventListener('click',function(){app.idxEmp++;renderApp();});
+    } else { toast('Você topou! Agora é esperar '+p.nome.split(' ')[0]+' responder.'); app.idxEmp++; renderApp(); }
+  });
+}
+function renderMeusEventos(m){
+  var evs=meusEventos().slice().reverse(), d=empDados();
+  if(!evs.length){
+    m.innerHTML='<div class="app-in"><h1 class="disp" style="margin:0 0 18px;font-size:30px">Meus eventos</h1><div class="vazio"><h2 class="disp" style="margin:0 0 8px">Nenhuma vaga publicada</h2><p style="margin:0 0 18px;color:var(--suave)">Publique uma vaga para os freelancers toparem.</p><button class="btn btn-roxo" id="me-nova">Publicar vaga</button></div></div>';
+    $('#me-nova').addEventListener('click',novaVaga); return;
+  }
+  m.innerHTML='<div class="app-in"><div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:20px"><h1 class="disp" style="margin:0;font-size:30px">Meus eventos</h1><button class="btn btn-roxo" id="me-nova">+ Publicar nova vaga</button></div>'+
+  '<div style="display:flex;flex-direction:column;gap:18px">'+evs.map(function(ev){
+    var cs=candidatos(ev), conf=cs.filter(function(c){return c.status==='confirmado';}), vagas=Number(ev.vagas)||1, total=conf.length*(ev.cache||0);
+    var dt=new Date((ev.data||dataRel(0))+'T12:00:00'), pago=d.pagos[ev.id];
+    return '<div class="caixa" style="padding:0;overflow:hidden">'+
+      '<div style="display:flex;gap:16px;padding:20px;align-items:flex-start;flex-wrap:wrap;border-bottom:1px solid #F0EDF7">'+
+        '<div class="dia"><small>'+MESES[dt.getMonth()]+'</small><b>'+dt.getDate()+'</b><small style="color:var(--suave);font-weight:600">'+DIAS_SEM[dt.getDay()]+'</small></div>'+
+        '<div style="flex:1;min-width:200px"><b class="disp" style="font-size:21px">'+esc(ev.evento)+'</b><div style="color:var(--texto);font-size:14.5px;margin-top:2px">'+esc(ev.areaBusca)+' · '+brl(ev.cache)+' por turno · '+(ev.inicio?hora(ev.inicio)+' às '+hora(ev.fim):'')+'</div><div style="font-size:14px;color:var(--suave)">'+esc(ev.evlocal)+'</div></div>'+
+        '<div style="text-align:right"><b class="disp" style="font-size:26px;color:var(--roxo)">'+conf.length+'/'+vagas+'</b><div style="font-size:13px;color:var(--suave)">vagas preenchidas</div></div>'+
+      '</div>'+
+      '<div style="padding:16px 20px"><h4 style="margin:0 0 10px;font-size:15px">Freelancers interessados</h4>'+
+      (cs.length? '<div style="display:flex;flex-direction:column;gap:10px">'+cs.map(function(c){
+        var p=c.p, st=c.status;
+        return '<div class="cand"><span class="cand-av" style="background:'+p.cor+'">'+avatarMini(p)+'</span><div style="flex:1;min-width:150px"><b>'+esc(p.nome)+'</b><div style="font-size:13.5px;color:var(--suave)">'+esc(p.papel)+' · '+(p.nota?'★ '+p.nota.toFixed(1).replace('.',',')+' · '+p.trab+' trabalhos':'Novo no Toppa')+'</div></div>'+
+          (st==='confirmado'?'<span class="status ok">✓ Na equipe · chat liberado</span>':
+           st==='aguardando'?'<span class="status esp">Você topou · aguardando</span>':
+           '<div style="display:flex;gap:8px;flex-wrap:wrap"><span class="status esp" style="background:var(--lilas);color:var(--roxo-med)">Topou sua vaga</span><button class="btn btn-roxo" style="min-height:40px;padding:8px 14px" data-ok="'+ev.id+'|'+p.key+'">Topar de volta</button><button class="btn btn-ghost" style="min-height:40px;padding:8px 10px" data-nao="'+ev.id+'|'+p.key+'">Recusar</button></div>')+
+        '</div>';
+      }).join('')+'</div>' : '<p style="margin:0;color:var(--suave);font-size:14px">Ainda ninguém. Veja a aba Talentos para topar freelancers.</p>')+'</div>'+
+      '<div class="pg-ev"><div><b>Pagamento pelo app</b><div style="font-size:13.5px;color:var(--suave)">'+conf.length+' confirmado(s) × '+brl(ev.cache)+' = <b style="color:var(--tinta)">'+brl(total)+'</b></div></div>'+
+        (pago? '<div class="aviso" style="margin:0;flex:1 1 100%"><span><b>Ainda não disponível, você entrou na lista.</b> Nenhuma cobrança foi feita. Avisaremos quando os pagamentos abrirem.</span></div>'
+             : (conf.length? '<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-roxo" style="min-height:42px" data-pagar="'+ev.id+'|deposito">Depósito de 20% ('+brl(total*0.2)+')</button><button class="btn btn-borda" style="min-height:42px" data-pagar="'+ev.id+'|depois">Pagar depois (+15%)</button></div>' : '<span style="font-size:13.5px;color:var(--suave)">Confirme alguém para liberar o pagamento.</span>'))+
+      '</div>'+
+    '</div>';
+  }).join('')+'</div></div>';
+  $('#me-nova').addEventListener('click',novaVaga);
+  $$('[data-ok]',m).forEach(function(x){x.addEventListener('click',function(){var a=x.dataset.ok.split('|');d.decisoes[a[0]]=d.decisoes[a[0]]||{};d.decisoes[a[0]][a[1]]='confirmado';salvarLocal();toast('Topou! O chat foi liberado.');renderApp();});});
+  $$('[data-nao]',m).forEach(function(x){x.addEventListener('click',function(){var a=x.dataset.nao.split('|');d.decisoes[a[0]]=d.decisoes[a[0]]||{};d.decisoes[a[0]][a[1]]='recusado';salvarLocal();renderApp();});});
+  $$('[data-pagar]',m).forEach(function(x){x.addEventListener('click',function(){
+    var a=x.dataset.pagar.split('|'); d.pagos[a[0]]=a[1]; salvarLocal();
+    var ev=meusEventos().filter(function(e){return e.id===a[0];})[0];
+    var corpo={evento:ev?ev.evento:'',pagamento:a[1],origem:'app empresa',quando:new Date().toISOString()};
+    meuCadastro.lista=corpo; salvarDoc('lista',corpo); concluiu=true; renderApp();
+  });});
+}
+function renderEmpresaPerfil(m){
+  var e=meuCadastro.empresa||{}, pl=PLANOS.filter(function(x){return x.id===e.plano;})[0], evs=meusEventos(), d=empDados();
+  var conf=evs.reduce(function(a,ev){return a+candidatos(ev).filter(function(c){return c.status==='confirmado';}).length;},0);
+  m.innerHTML='<div class="app-in"><h1 class="disp" style="margin:0 0 18px;font-size:30px">Minha empresa</h1><div class="deck-area">'+
+    '<div class="caixa" style="flex:1 1 340px;max-width:440px;display:flex;flex-direction:column;gap:14px">'+
+      '<div style="display:flex;gap:14px;align-items:center"><span class="emp-logo" style="background:var(--lilas-2);width:60px;height:60px;font-size:22px">'+(e.logo?'<img src="'+e.logo+'" alt="Logo da '+esc(e.nome)+'">':esc(iniciais(e.nome)))+'</span><div><b class="disp" style="font-size:24px">'+esc(e.nome)+'</b><div style="color:var(--suave);font-size:14px">'+esc(e.segmento)+(e.tamanho?' · '+esc(e.tamanho):'')+'</div></div></div>'+
+      '<div class="info-l">'+IC_PIN+'<span>'+esc(e.cidade)+'</span></div>'+
+      (pl?'<div class="vaga-valor" style="flex-direction:column;align-items:flex-start"><span style="font-size:13px;font-weight:700;letter-spacing:.5px;text-transform:uppercase">Plano '+pl.nome+' (teste)</span><b class="disp" style="font-size:28px">'+brl(porMes(pl))+'<span style="font-size:14px;color:var(--suave);font-family:Inter;font-weight:500"> /mês</span></b></div>':'')+
+    '</div>'+
+    '<div class="detalhes">'+
+      '<div class="mini"><div><small>Vagas publicadas</small><b>'+evs.length+'</b></div><div><small>Freelancers na equipe</small><b>'+conf+'</b></div><div><small>Topadas enviadas</small><b>'+d.convites.length+'</b></div></div>'+
+      '<div class="caixa" style="display:flex;flex-direction:column;gap:10px"><h4 style="margin:0">O que fazer agora</h4><button class="btn btn-roxo" id="pe-vaga">Publicar nova vaga</button><button class="btn btn-borda" id="pe-reserva">Reservar uma equipe completa</button><button class="btn btn-borda" id="pe-freela">Testar o lado freelancer</button>'+(avaliou?'':'<button class="btn btn-ghost" id="pe-avaliar">Avaliar o protótipo</button>')+'</div>'+
+    '</div></div></div>';
+  $('#pe-vaga').addEventListener('click',novaVaga);
+  $('#pe-reserva').addEventListener('click',function(){ fecharAppSemFeedback(); abrir('reserva'); });
+  $('#pe-freela').addEventListener('click',function(){ fecharAppSemFeedback(); if(meuCadastro.freela) abrirApp('vagas','freela'); else abrir('freela'); });
+  var av=$('#pe-avaliar'); if(av) av.addEventListener('click',function(){ fecharAppSemFeedback(); concluiu=false; abrir('feedback'); });
+}
+function fecharAppSemFeedback(){ $('#app').hidden=true; document.body.style.overflow=''; }
+function novaVaga(){ fecharAppSemFeedback(); abrir('empresa',{soEvento:true}); }
+
+$('#btn-app').addEventListener('click',function(){ abrirApp('vagas','freela'); });
+$('#btn-app-emp').addEventListener('click',function(){ abrirApp('talentos','empresa'); });
+if(meuCadastro.freela) $('#btn-app').hidden=false;
+if(meuCadastro.empresa) $('#btn-app-emp').hidden=false;
+
+/* ---------- Painel de resultados (dono/editores) ---------- */
+$('#btn-painel').addEventListener('click',function(){
+  $('#modal-bg').classList.add('show'); document.body.style.overflow='hidden'; prog(0,0);
+  var b=$('#modal-body');
+  b.innerHTML='<h2>Painel de resultados</h2><p class="sub">Carregando…</p>';
+  if(!db){ b.innerHTML='<h2>Painel de resultados</h2><p class="sub">Os dados não estão disponíveis nesta visualização.</p>'; return; }
+  var timer=setTimeout(function(){ var s=$('.sub',b); if(s) s.textContent='Os dados ainda não responderam. Tente de novo em instantes.'; },10000);
+  Promise.all([db.collection('cadastros').get(), db.collection('visitas').get(), db.collection('feedbacks').get(), db.collection('lista').get()]).then(function(r){
+    var fbs=r[2].docs.map(function(d){return d.data();}), lst=r[3].docs.map(function(d){return d.data();});
+    clearTimeout(timer);
+    var cads=r[0].docs.map(function(d){return d.data();}), vis=r[1].docs.map(function(d){return d.data();});
+    var fre=cads.filter(function(c){return c.freela;}), emp=cads.filter(function(c){return c.empresa;});
+    var totalVisitas=vis.reduce(function(a,v){return a+(v.vezes||1);},0);
+    var cont={}; PLANOS.forEach(function(p){cont[p.id]=0;}); emp.forEach(function(c){ if(cont[c.empresa.plano]!=null) cont[c.empresa.plano]++; });
+    var pag={}; emp.forEach(function(c){var k=c.empresa.pagaria||'—';pag[k]=(pag[k]||0)+1;});
+    var media= emp.length? emp.reduce(function(a,c){return a+(Number(c.empresa.justo)||0);},0)/emp.length : 0;
+    function barras(obj,rot){var max=Math.max.apply(null,Object.keys(obj).map(function(k){return obj[k];}).concat([1]));return Object.keys(obj).map(function(k){return '<div style="display:flex;align-items:center;gap:10px;margin:7px 0;font-size:14px"><span style="width:150px;flex:none">'+esc(rot?rot(k):k)+'</span><span class="barra"><i style="width:'+(obj[k]/max*100)+'%"></i></span><b style="width:28px;text-align:right">'+obj[k]+'</b></div>';}).join('');}
+    var nomePlano=function(id){var p=PLANOS.filter(function(x){return x.id===id;})[0];return p? p.nome+' ('+brl(porMes(p))+')':id;};
+    b.innerHTML='<h2>Painel de resultados</h2><p class="sub">Só você e editores veem esta tela.</p>'+
+      '<div class="kpis"><div><small>Visitantes únicos</small><b>'+vis.length+'</b></div><div><small>Visitas</small><b>'+totalVisitas+'</b></div><div><small>Freelancers</small><b>'+fre.length+'</b></div><div><small>Empresas</small><b>'+emp.length+'</b></div></div>'+
+      '<div class="caixa" style="margin-bottom:14px"><h4>Plano escolhido pelas empresas</h4>'+(emp.length?barras(cont,nomePlano):'<p style="margin:0;color:var(--suave)">Nenhuma empresa ainda.</p>')+'</div>'+
+      '<div class="caixa" style="margin-bottom:14px"><h4>Pagaria pelo Toppa?</h4>'+(emp.length?barras(pag):'<p style="margin:0;color:var(--suave)">Nenhuma resposta ainda.</p>')+(emp.length?'<p style="margin:10px 0 0;font-size:14px">Preço justo médio: <b>'+brl(media)+'/mês</b></p>':'')+'</div>'+
+      '<div class="kpis"><div><small>Avaliações</small><b>'+fbs.length+'</b></div><div><small>Nota média</small><b>'+(fbs.length?(fbs.reduce(function(a,f){return a+(f.nota||0);},0)/fbs.length).toFixed(1).replace('.',','):'—')+'</b></div><div><small>Lista de espera</small><b>'+lst.length+'</b></div><div><small>Escolheram depósito 20%</small><b>'+lst.filter(function(x){return x.pagamento==='deposito';}).length+'</b></div></div>'+
+      '<div class="caixa" style="margin-bottom:14px"><h4>Comentários das avaliações</h4>'+(fbs.filter(function(f){return f.melhorar;}).length? fbs.filter(function(f){return f.melhorar;}).map(function(f){return '<p style="margin:0 0 10px;padding:12px;border-radius:12px;background:var(--nevoa);font-size:14px"><b>'+f.nota+'★</b> · '+esc(f.usaria)+'<br>'+esc(f.melhorar)+'</p>';}).join('') : '<p style="margin:0;color:var(--suave)">Nenhum comentário ainda.</p>')+'</div>'+
+      '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px"><button class="btn btn-borda" id="csv-cad">Copiar cadastros (planilha)</button><button class="btn btn-borda" id="csv-fb">Copiar avaliações (planilha)</button></div>'+
+      '<div class="caixa"><h4>Cadastros</h4><div class="scroll-x"><table class="tabela"><thead><tr><th>Tipo</th><th>Nome</th><th>Detalhe</th><th>Cidade</th></tr></thead><tbody>'+
+      (cads.length? cads.map(function(c){var linhas='';if(c.freela)linhas+='<tr><td>Freelancer</td><td>'+esc(c.freela.nome)+'</td><td>'+esc(c.freela.titulo)+'</td><td>'+esc(c.freela.cidade)+'</td></tr>';if(c.empresa)linhas+='<tr><td>Empresa</td><td>'+esc(c.empresa.nome)+'</td><td>'+esc(nomePlano(c.empresa.plano))+'</td><td>'+esc(c.empresa.cidade)+'</td></tr>';return linhas;}).join('') : '<tr><td colspan="4" style="color:var(--suave)">Nenhum cadastro ainda.</td></tr>')+
+      '</tbody></table></div></div>';
+    function csv(linhas){ return linhas.map(function(l){ return l.map(function(v){ v=String(v==null?'':v); return /[";\n]/.test(v)? '"'+v.replace(/"/g,'""')+'"' : v; }).join(';'); }).join('\n'); }
+    function copiar(txt,msg){ try{ navigator.clipboard.writeText(txt).then(function(){toast(msg);},function(){toast('Não foi possível copiar. Tente de novo.');}); }catch(e){ toast('Não foi possível copiar.'); } }
+    $('#csv-cad').addEventListener('click',function(){
+      var L=[['Tipo','Nome','Título ou plano','Área ou função','Local','Detalhe','Data']];
+      cads.forEach(function(c){
+        if(c.freela) L.push(['Freelancer',c.freela.nome,c.freela.titulo,c.freela.area,c.freela.cidade,(c.freela.habilidades||[]).join(', '),c.freela.quando]);
+        if(c.empresa) L.push(['Empresa',c.empresa.nome,c.empresa.plano,c.empresa.areaBusca,c.empresa.cidade,'Pagaria: '+(c.empresa.pagaria||'')+' | Justo: R$ '+(c.empresa.justo||'')+' | Peso: '+(c.empresa.peso||''),c.empresa.quando]);
+      });
+      copiar(csv(L),'Cadastros copiados. Cole numa planilha (Excel ou Google Sheets).');
+    });
+    $('#csv-fb').addEventListener('click',function(){
+      var L=[['Nota','Fácil de usar','Usaria','Gostou de','Melhoraria','Data']];
+      fbs.forEach(function(f){ L.push([f.nota,f.facil,f.usaria,(f.gostou||[]).join(', '),f.melhorar,f.quando]); });
+      copiar(csv(L),'Avaliações copiadas. Cole numa planilha (Excel ou Google Sheets).');
+    });
+  }).catch(function(){ clearTimeout(timer); b.innerHTML='<h2>Painel de resultados</h2><p class="sub">Não foi possível carregar os dados agora.</p>'; });
+});
+
+iniciarCapacidades();
+})();
+</script>
+</body>
+</html>
