@@ -735,7 +735,7 @@ function htmlPlano(p, on, compacto){
   var badge = p.id==='anual'? '<span class="badge">Melhor preço</span>' : (p.id==='semestral'? '<span class="badge">Mais escolhido</span>':'');
   var desc = p.desc? '<span class="desc">'+Math.round(p.desc*100)+'% de desconto</span>' : '<span class="desc" style="visibility:hidden">—</span>';
   var det = p.meses===1? 'Cobrado todo mês. Cancele quando quiser.' : brl(total(p))+' a cada '+p.meses+' meses · economia de '+brl(economia(p));
-  return '<button class="plano'+(on?' on':'')+'" data-plano="'+p.id+'" aria-pressed="'+(on?'true':'false')+'">'+badge+'<span class="nome">'+p.nome+'</span>'+desc+'<span class="preco"><b>'+brl(porMes(p)).replace('R$ ','R$&nbsp;')+'</b><small>/mês</small></span><span class="det">'+det+'</span></button>';
+  return '<button class="plano'+(on?' on':'')+'" data-plano="'+p.id+'" aria-pressed="'+(on?'true':'false')+'">'+badge+'<span class="nome">'+p.nome+'</span>'+desc+'<span class="preco"><b>'+brl(porMes(p)).replace('R$ ','R$\u00a0')+'</b><small>/mês</small></span><span class="det">'+det+'</span></button>';
 }
 var planoLP='anual';
 function renderPlanosLP(){
